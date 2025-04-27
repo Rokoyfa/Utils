@@ -20,7 +20,7 @@ namespace r_utils {
 			bool remove();
 			bool create();
 
-			std::string getFilePath();
+			std::string getFilePath() const;
 		private:
 			std::string filePath;
 		};

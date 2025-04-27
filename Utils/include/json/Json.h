@@ -37,7 +37,7 @@ namespace r_utils {
             std::string asString() const;
             int asInt() const;
             double asDouble() const;
-            bool asBool() const;
+            bool asBoolean() const;
             JsonObject asObject() const;
 
         private:

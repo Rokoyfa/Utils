@@ -66,7 +66,7 @@ namespace r_utils {
         }
 
 
-        std::string File::getFilePath()
+        std::string File::getFilePath() const
         {
             return this->filePath;
         }

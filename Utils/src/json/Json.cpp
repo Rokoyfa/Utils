@@ -70,7 +70,7 @@ namespace r_utils {
             throw std::runtime_error("Json is not a Double");
         }
 
-        bool Json::asBool() const {
+        bool Json::asBoolean() const {
             if (type == JsonType::Boolean) {
                 return std::get<bool>(value);
             }
