@@ -4,17 +4,23 @@
 #include <unordered_map>
 #include <sstream>
 
-#include "Json.h"
+//#include "Json.h"
 
 namespace r_utils {
     namespace json {
+
+        class Json;
+
+
+
+        std::ostream& operator<<(std::ostream& os, const r_utils::json::JsonObject& obj);
 
         class JsonObject {
         public:
             JsonObject() = default;
 
             bool contains(const std::string& key) const;
-            Json get(const std::string& key) const;
+            r_utils::json::Json get(const std::string& key) const;
             r_utils::json::Json get(const int index) const;
             r_utils::json::JsonObject set(const std::string& key, const r_utils::json::Json& value);
             void remove(const std::string& key);
@@ -25,10 +31,9 @@ namespace r_utils {
             r_utils::json::Json toJson() const;
 
         private:
-            std::unordered_map<std::string, Json> values;
+            std::unordered_map<std::string, r_utils::json::Json> values;
 
             static std::string indent(int level);
         };
-
     }
 }

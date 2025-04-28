@@ -2,7 +2,8 @@
 
 #include <iostream>
 #include <variant>
-#include "JsonObject.h"
+
+#include "json/JsonObject.h"
 
 namespace r_utils {
     namespace json {
@@ -16,6 +17,8 @@ namespace r_utils {
             Object
         };
 
+        std::ostream& operator<<(std::ostream& os, const JsonType& type);
+
         class Json
         {
         public:
@@ -24,7 +27,7 @@ namespace r_utils {
             Json(int value);
             Json(double value);
             Json(bool value);
-            Json(const JsonObject& value);
+            Json(const r_utils::json::JsonObject& value);
 
             JsonType getType() const;
 
@@ -38,11 +41,12 @@ namespace r_utils {
             int asInt() const;
             double asDouble() const;
             bool asBoolean() const;
-            JsonObject asObject() const;
+            r_utils::json::JsonObject asObject() const;
 
+            r_utils::json::JsonObject empty() const;
         private:
             JsonType type;
-            std::variant<std::monostate, std::string, int, double, bool, JsonObject> value;
+            std::variant<std::monostate, std::string, int, double, bool, r_utils::json::JsonObject> value;
         };
 
     }

@@ -1,4 +1,5 @@
 #include "json/JsonObject.h"
+#include "json/Json.h"
 
 namespace r_utils {
     namespace json {
@@ -7,7 +8,7 @@ namespace r_utils {
             return values.find(key) != values.end();
         }
 
-        Json JsonObject::get(const std::string& key) const {
+        r_utils::json::Json JsonObject::get(const std::string& key) const {
             auto it = values.find(key);
             if (it != values.end()) {
                 return it->second;
@@ -66,7 +67,7 @@ namespace r_utils {
                     result << indent(indentLevel + 1);
                 }
 
-                result << "\"" << key << "\"";
+                result << "\"" << key << "\":";
                 if (prettyPrint)
                 {
                     result << " ";
@@ -119,5 +120,11 @@ namespace r_utils {
             return r_utils::json::Json(*this);
         }
 
-    }
+        std::ostream& operator<<(std::ostream& os, const r_utils::json::JsonObject& obj)
+        {
+            os << obj.toString();
+            return os;
+        }
+
+}
 }

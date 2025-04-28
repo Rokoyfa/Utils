@@ -1,4 +1,5 @@
 #include "json/Json.h"
+#include "json/JsonObject.h"
 
 namespace r_utils {
     namespace json {
@@ -18,7 +19,7 @@ namespace r_utils {
         Json::Json(bool value)
             : type(JsonType::Boolean), value(value) {}
 
-        Json::Json(const JsonObject& value)
+        Json::Json(const r_utils::json::JsonObject& value)
             : type(JsonType::Object), value(value) {}
 
 
@@ -77,11 +78,32 @@ namespace r_utils {
             throw std::runtime_error("Json is not a Boolean");
         }
 
-        JsonObject Json::asObject() const {
+        r_utils::json::JsonObject Json::asObject() const {
             if (type == JsonType::Object) {
                 return std::get<JsonObject>(value);
             }
             throw std::runtime_error("Json is not an Object");
+        }
+
+        r_utils::json::JsonObject Json::empty() const
+        {
+            return r_utils::json::JsonObject();
+        }
+
+        std::ostream& operator<<(std::ostream& os, const JsonType& type)
+        {
+            switch (type)
+            {
+            case JsonType::Null:    os << "Null"; break;
+            case JsonType::String:  os << "String"; break;
+            case JsonType::Int:     os << "Integer"; break;
+            case JsonType::Double:  os << "Double"; break;
+            case JsonType::Boolean: os << "Boolean"; break;
+            case JsonType::Object:  os << "Object"; break;
+            default: os << "Unknown JsonType!"; break;
+            }
+
+            return os;
         }
 
     }
