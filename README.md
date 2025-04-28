@@ -86,10 +86,16 @@ int main() {
     std::cout << "File content after append: " << myFile.read() << std::endl;
 
     // JSON Operations
-    r_utils::json::JsonObject myJsonObject;
-    myJsonObject.set("name", r_utils::json::Json(std::string("Example")));
-    myJsonObject.set("age", r_utils::json::Json(30));
+    r_utils::json::JsonObject obj = r_utils::json::Json().empty()
+        .set("name", r_utils::json::Json(std::string("Example")))
+        .set("age", r_utils::json::Json(30));
     std::cout << "JSON Object: " << myJsonObject.toString() << std::endl;
+
+    // Nested Json
+    r_utils::json::JsonObject nested = r_utils::json::Json().empty()
+        .set("person", r_utils::json::Json(obj));
+    // Overloaded << operator for JsonObjects
+    std::cout << "JSON Object: " << nested << std::endl;
 
     return 0;
 }
