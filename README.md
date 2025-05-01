@@ -89,7 +89,7 @@ int main() {
     r_utils::json::JsonObject obj = r_utils::json::Json().empty()
         .set("name", r_utils::json::Json(std::string("Example")))
         .set("age", r_utils::json::Json(30));
-    std::cout << "JSON Object: " << myJsonObject.toString() << std::endl;
+    std::cout << "JSON Object: " << obj.toString() << std::endl;
 
     // Nested Json
     r_utils::json::JsonObject nested = r_utils::json::Json().empty()
