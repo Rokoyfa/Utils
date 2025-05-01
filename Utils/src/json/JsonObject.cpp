@@ -1,5 +1,5 @@
 #include "json/JsonObject.h"
-#include "json/Json.h"
+#include "json/JsonElement.h"
 
 namespace r_utils {
     namespace json {
@@ -8,7 +8,7 @@ namespace r_utils {
             return values.find(key) != values.end();
         }
 
-        r_utils::json::Json JsonObject::get(const std::string& key) const {
+        r_utils::json::JsonElement JsonObject::get(const std::string& key) const {
             auto it = values.find(key);
             if (it != values.end()) {
                 return it->second;
@@ -17,7 +17,7 @@ namespace r_utils {
             throw std::runtime_error("Key not found: " + key);
         }
 
-        r_utils::json::Json JsonObject::get(const int index) const
+        r_utils::json::JsonElement JsonObject::get(const int index) const
         {
             if (index >= this->size()) {
                 throw std::out_of_range("Index out of bounds");
@@ -27,7 +27,7 @@ namespace r_utils {
             return it->second;
         }
 
-        r_utils::json::JsonObject JsonObject::set(const std::string& key, const Json& value) {
+        r_utils::json::JsonObject JsonObject::set(const std::string& key, const JsonElement& value) {
             values[key] = value;
             return *this;
         }
@@ -35,6 +35,11 @@ namespace r_utils {
         void JsonObject::remove(const std::string& key)
         {
             values.erase(key);
+        }
+
+        std::unordered_map<std::string, r_utils::json::JsonElement> JsonObject::getValues() const
+        {
+            return values;
         }
 
 
@@ -73,23 +78,26 @@ namespace r_utils {
                     result << " ";
                 }
 
-                if (value.isObject()) {
-                    result << value.asObject().toString(prettyPrint, indentLevel + 1);
-                }
-                else if (value.isString()) {
-                    result << "\"" << value.asString() << "\"";
-                }
-                else if (value.isInt()) {
-                    result << value.asInt();
-                }
-                else if (value.isDouble()) {
-                    result << value.asDouble();
-                }
-                else if (value.isBoolean()) {
-                    result << (value.asBoolean() ? "true" : "false");
-                }
-                else {
-                    result << "null";
+                auto it = value.getType();
+
+                switch (it)
+                {
+                case r_utils::json::JsonType::Null:
+                    result << "null"; break;
+                case r_utils::json::JsonType::String:
+                    result << "\"" << value.asString() << "\""; break;
+                case r_utils::json::JsonType::Int:
+                    result << value.asInt(); break;
+                case r_utils::json::JsonType::Double:
+                    result << value.asDouble(); break;
+                case r_utils::json::JsonType::Boolean:
+                    result << (value.asBoolean() ? "true" : "false"); break;
+                case r_utils::json::JsonType::Array:
+                    result << value.asArray().toString(); break;
+                case r_utils::json::JsonType::Object:
+                    result << value.asObject().toString(prettyPrint, indentLevel + 1); break;
+                default:
+                    break;
                 }
 
 
@@ -116,9 +124,11 @@ namespace r_utils {
             return result.str();
         }
 
-        r_utils::json::Json JsonObject::toJson() const {
-            return r_utils::json::Json(*this);
+        r_utils::json::JsonElement JsonObject::toJson() const {
+            return r_utils::json::JsonElement(*this);
         }
+
+
 
         std::ostream& operator<<(std::ostream& os, const r_utils::json::JsonObject& obj)
         {
@@ -126,5 +136,15 @@ namespace r_utils {
             return os;
         }
 
-}
+        bool operator==(const r_utils::json::JsonObject& x, const r_utils::json::JsonObject& y)
+        {   
+            return (x.getValues() == y.getValues());
+        }
+
+        bool operator!=(const r_utils::json::JsonObject& x, const r_utils::json::JsonObject& y)
+        {
+            return !(x == y);
+        }
+
+    }
 }

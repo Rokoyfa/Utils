@@ -131,14 +131,20 @@
   <ItemGroup>
     <ClCompile Include="src\file\File.cpp" />
     <ClCompile Include="src\json\Json.cpp" />
+    <ClCompile Include="src\json\JsonArray.cpp" />
+    <ClCompile Include="src\json\JsonElement.cpp" />
     <ClCompile Include="src\json\JsonObject.cpp" />
+    <ClCompile Include="src\json\JsonParser.cpp" />
     <ClCompile Include="tests\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\all.h" />
     <ClInclude Include="include\file\File.h" />
     <ClInclude Include="include\json\Json.h" />
+    <ClInclude Include="include\json\JsonArray.h" />
+    <ClInclude Include="include\json\JsonElement.h" />
     <ClInclude Include="include\json\JsonObject.h" />
+    <ClInclude Include="include\json\JsonParser.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

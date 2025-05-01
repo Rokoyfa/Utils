@@ -1,53 +1,24 @@
 #pragma once
 
 #include <iostream>
-#include <variant>
 
+#include "json/JsonElement.h"
 #include "json/JsonObject.h"
 
-namespace r_utils {
-    namespace json {
+namespace r_utils
+{
+	namespace json
+	{
 
-        enum class JsonType {
-            Null,
-            String,
-            Int,
-            Double,
-            Boolean,
-            Object
-        };
+		class Json
+		{
+		public:
+			static r_utils::json::JsonElement parse(const std::string& input);
 
-        std::ostream& operator<<(std::ostream& os, const JsonType& type);
+			static std::string stringify(const r_utils::json::JsonElement& element);
 
-        class Json
-        {
-        public:
-            Json();
-            Json(const std::string& value);
-            Json(int value);
-            Json(double value);
-            Json(bool value);
-            Json(const r_utils::json::JsonObject& value);
-
-            JsonType getType() const;
-
-            bool isString() const;
-            bool isInt() const;
-            bool isDouble() const;
-            bool isBoolean() const;
-            bool isObject() const;
-
-            std::string asString() const;
-            int asInt() const;
-            double asDouble() const;
-            bool asBoolean() const;
-            r_utils::json::JsonObject asObject() const;
-
-            r_utils::json::JsonObject empty() const;
-        private:
-            JsonType type;
-            std::variant<std::monostate, std::string, int, double, bool, r_utils::json::JsonObject> value;
-        };
-
-    }
+			static r_utils::json::JsonObject emptyObject();
+		};
+	}
 }
+
