@@ -9,6 +9,8 @@ namespace r_utils {
 
         class JsonElement;
 
+        class Json;
+
 
         class JsonObject {
         public:
@@ -24,7 +26,7 @@ namespace r_utils {
             size_t size() const;
 
             std::string toString(bool prettyPrint = false, int indentLevel = 0) const;
-            r_utils::json::JsonElement toJson() const;
+            r_utils::json::Json toJson() const;
 
         private:
             std::unordered_map<std::string, r_utils::json::JsonElement> values;

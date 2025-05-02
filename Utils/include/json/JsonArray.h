@@ -15,7 +15,8 @@ namespace r_utils
 		public:
 			JsonArray() = default;
 
-			void add(const r_utils::json::JsonElement& element);
+			r_utils::json::JsonArray add(const r_utils::json::JsonElement& element);
+			r_utils::json::JsonArray remove(const r_utils::json::JsonElement& element);
 			size_t size() const;
 			bool empty() const;
 

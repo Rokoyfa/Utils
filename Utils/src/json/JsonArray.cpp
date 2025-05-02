@@ -6,9 +6,19 @@
 namespace r_utils {
 	namespace json {
 
-		void JsonArray::add(const r_utils::json::JsonElement& element)
+		r_utils::json::JsonArray JsonArray::add(const r_utils::json::JsonElement& element)
 		{
 			this->values.push_back(element);
+			return *this;
+		}
+
+		r_utils::json::JsonArray JsonArray::remove(const r_utils::json::JsonElement& element)
+		{
+			auto it = std::remove(this->values.begin(), this->values.end(), element);
+
+			this->values.erase(it, this->values.end());
+
+			return *this;
 		}
 
 		size_t JsonArray::size() const

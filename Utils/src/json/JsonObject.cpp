@@ -1,5 +1,6 @@
 #include "json/JsonObject.h"
 #include "json/JsonElement.h"
+#include "json/Json.h"
 
 namespace r_utils {
     namespace json {
@@ -124,8 +125,8 @@ namespace r_utils {
             return result.str();
         }
 
-        r_utils::json::JsonElement JsonObject::toJson() const {
-            return r_utils::json::JsonElement(*this);
+        r_utils::json::Json JsonObject::toJson() const {
+            return r_utils::json::Json(*this);
         }
 
 
