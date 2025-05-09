@@ -4,28 +4,62 @@ namespace r_utils
 {
     namespace json
     {
-        Json::Json(r_utils::json::JsonObject obj)
-            : obj(obj) {}
-
-        r_utils::json::JsonElement Json::parse(const std::string& input)
+        Json::Json()
         {
-            return r_utils::json::JsonParser().parse(input);
         }
 
-        r_utils::json::JsonElement Json::parse(const r_utils::io::File& file)
+        Json::Json(JsonElement element)
+            : root(std::move(element)) {}
+
+
+        Json Json::parse(const std::string& input)
         {
-            return r_utils::json::JsonParser().parse(file);
+            return Json(JsonParser::parse(input));
+        }
+
+        Json Json::parse(const r_utils::io::File& file)
+        {
+            return Json(JsonParser::parse(file));
         }
 
 
-        r_utils::json::JsonObject Json::emptyObject()
+        bool Json::isObject() const
         {
-            return r_utils::json::JsonObject();
+            return root.isObject();
         }
 
-        std::string Json::toString()
+        bool Json::isArray() const
         {
-            return this->obj.toString();
+            return root.isArray();
         }
+
+
+        JsonObject Json::asObject() const
+        {
+            return root.asObject();
+        }
+
+        JsonArray Json::asArray() const
+        {
+            return root.asArray();
+        }
+
+
+        std::string Json::toString() const
+        {
+            return root.stringify();
+        }
+
+
+        JsonObject Json::emptyObject()
+        {
+            return JsonObject();
+        }
+
+        JsonArray Json::emptyArray()
+        {
+            return JsonArray();
+        }
+
     }
 }

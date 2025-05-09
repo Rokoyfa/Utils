@@ -1,6 +1,7 @@
 # Utils - 
 
 `Utils` is a C++ library providing a collection of reusable utility classes and functions. It currently includes modules for basic file operations and JSON data handling.
+`Utils` is designed to reduce boilerplate code in modern C++ projects.
 
 ## Current Features
 

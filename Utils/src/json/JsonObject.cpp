@@ -2,33 +2,45 @@
 #include "json/JsonElement.h"
 #include "json/Json.h"
 
-namespace r_utils {
-    namespace json {
+#include "exception/json/JsonObjectException.h"
 
-        bool JsonObject::contains(const std::string& key) const {
+namespace r_utils 
+{
+    namespace json 
+    {
+
+        bool JsonObject::contains(const std::string& key) const 
+        {
             return values.find(key) != values.end();
         }
 
-        r_utils::json::JsonElement JsonObject::get(const std::string& key) const {
+        r_utils::json::JsonElement JsonObject::get(const std::string& key) const 
+        {
             auto it = values.find(key);
             if (it != values.end()) {
                 return it->second;
             }
 
-            throw std::runtime_error("Key not found: " + key);
+            throw r_utils::exception::JsonObjectException("Key not found: " + key);;
         }
 
         r_utils::json::JsonElement JsonObject::get(const int index) const
         {
             if (index >= this->size()) {
-                throw std::out_of_range("Index out of bounds");
+                throw r_utils::exception::JsonObjectException(std::out_of_range("Index out of bounds"));
             }
             auto it = values.begin();
             std::advance(it, index);
             return it->second;
         }
 
-        r_utils::json::JsonObject JsonObject::set(const std::string& key, const JsonElement& value) {
+        r_utils::json::JsonObject& JsonObject::set(const std::string& key, const JsonElement& value) 
+        {
+            if (key.empty())
+            {
+                throw r_utils::exception::JsonObjectException("Key value cannot be empty!");
+            }
+
             values[key] = value;
             return *this;
         }
@@ -38,7 +50,7 @@ namespace r_utils {
             values.erase(key);
         }
 
-        std::unordered_map<std::string, r_utils::json::JsonElement> JsonObject::getValues() const
+        const std::unordered_map<std::string, r_utils::json::JsonElement>& JsonObject::getValues() const
         {
             return values;
         }
@@ -125,7 +137,8 @@ namespace r_utils {
             return result.str();
         }
 
-        r_utils::json::Json JsonObject::toJson() const {
+        r_utils::json::Json JsonObject::toJson() const 
+        {
             return r_utils::json::Json(*this);
         }
 

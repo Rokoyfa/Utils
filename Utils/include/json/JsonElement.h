@@ -29,23 +29,24 @@ namespace r_utils {
         public:
             JsonElement();
             JsonElement(const std::string& value);
+            JsonElement(const char* value);
             JsonElement(int value);
             JsonElement(double value);
             JsonElement(bool value);
             JsonElement(const r_utils::json::JsonArray& value);
             JsonElement(const r_utils::json::JsonObject& value);
 
-            JsonType getType() const;
-            std::string stringify() const;
-            std::variant<std::monostate, std::string, int, double, bool, r_utils::json::JsonObject, r_utils::json::JsonArray> getValue() const;
+            [[nodiscard]] JsonType getType() const;
+            [[nodiscard]] std::string stringify() const;
+            [[nodiscard]] std::variant<std::monostate, std::string, int, double, bool, r_utils::json::JsonObject, r_utils::json::JsonArray> getValue() const;
 
-            bool isNull() const;
-            bool isString() const;
-            bool isInt() const;
-            bool isDouble() const;
-            bool isBoolean() const;
-            bool isArray() const;
-            bool isObject() const;
+            [[nodiscard]] bool isNull() const;
+            [[nodiscard]] bool isString() const;
+            [[nodiscard]] bool isInt() const;
+            [[nodiscard]] bool isDouble() const;
+            [[nodiscard]] bool isBoolean() const;
+            [[nodiscard]] bool isArray() const;
+            [[nodiscard]] bool isObject() const;
 
             std::string asString() const;
             int asInt() const;

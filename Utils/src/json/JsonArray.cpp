@@ -1,24 +1,40 @@
 #include "json/JsonArray.h"
-
 #include "json/JsonElement.h"
+
+#include "exception/json/JsonArrayException.h"
 
 
 namespace r_utils {
 	namespace json {
 
-		r_utils::json::JsonArray JsonArray::add(const r_utils::json::JsonElement& element)
+		r_utils::json::JsonArray& JsonArray::add(const r_utils::json::JsonElement& element)
 		{
 			this->values.push_back(element);
 			return *this;
 		}
 
-		r_utils::json::JsonArray JsonArray::remove(const r_utils::json::JsonElement& element)
+		r_utils::json::JsonArray& JsonArray::remove(const r_utils::json::JsonElement& element)
 		{
-			auto it = std::remove(this->values.begin(), this->values.end(), element);
+			auto size = values.size();
 
-			this->values.erase(it, this->values.end());
+			auto it = std::remove(values.begin(), values.end(), element);
+			values.erase(it, values.end());
+
+			if (values.size() == size)
+			{
+				throw r_utils::exception::JsonArrayException("Element not found in array");
+			}
 
 			return *this;
+		}
+
+		const r_utils::json::JsonElement& JsonArray::get(int index) const
+		{
+			if (index < 0 || index >= static_cast<int>(values.size()))
+			{
+				throw r_utils::exception::JsonArrayException("Index out of bounds: " + std::to_string(index));
+			}
+			return values.at(index);
 		}
 
 		size_t JsonArray::size() const
@@ -66,6 +82,11 @@ namespace r_utils {
 
 			ss << "]";
 			return ss.str();
+		}
+
+		const r_utils::json::JsonElement& JsonArray::operator[](int index) const
+		{
+			return this->get(index);
 		}
 
 

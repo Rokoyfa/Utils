@@ -1,6 +1,8 @@
 #include "json/JsonElement.h"
 #include "json/JsonObject.h"
 
+#include "exception/json/JsonElementException.h"
+
 namespace r_utils {
     namespace json {
 
@@ -9,6 +11,9 @@ namespace r_utils {
 
         JsonElement::JsonElement(const std::string& value)
             : type(JsonType::String), value(value) {}
+
+        JsonElement::JsonElement(const char* value)
+            : type(JsonType::String), value(std::string(value)) {}
 
         JsonElement::JsonElement(int value)
             : type(JsonType::Int), value(value) {}
@@ -51,7 +56,7 @@ namespace r_utils {
             }
         }
 
-        std::variant < std::monostate, std::string, int, double, bool, r_utils::json::JsonObject, r_utils::json::JsonArray> JsonElement::getValue() const
+        std::variant <std::monostate, std::string, int, double, bool, r_utils::json::JsonObject, r_utils::json::JsonArray> JsonElement::getValue() const
         {
             return this->value;
         }
@@ -91,7 +96,7 @@ namespace r_utils {
             if (type == JsonType::String) {
                 return std::get<std::string>(value);
             }
-            throw std::runtime_error("Json is not a String");
+            throw r_utils::exception::JsonElementException("Json is not a String");
         }
 
 
@@ -99,21 +104,21 @@ namespace r_utils {
             if (type == JsonType::Int) {
                 return std::get<int>(value);
             }
-            throw std::runtime_error("Json is not an Int");
+            throw r_utils::exception::JsonElementException("Json is not an Int");
         }
 
         double JsonElement::asDouble() const {
             if (type == JsonType::Double) {
                 return std::get<double>(value);
             }
-            throw std::runtime_error("Json is not a Double");
+            throw r_utils::exception::JsonElementException("Json is not a Double");
         }
 
         bool JsonElement::asBoolean() const {
             if (type == JsonType::Boolean) {
                 return std::get<bool>(value);
             }
-            throw std::runtime_error("Json is not a Boolean");
+            throw r_utils::exception::JsonElementException("Json is not a Boolean");
         }
 
         r_utils::json::JsonArray JsonElement::asArray() const
@@ -121,14 +126,14 @@ namespace r_utils {
             if (type == JsonType::Array) {
                 return std::get<JsonArray>(value);
             }
-            throw std::runtime_error("Json is not an Array");
+            throw r_utils::exception::JsonElementException("Json is not an Array");
         }
 
         r_utils::json::JsonObject JsonElement::asObject() const {
             if (type == JsonType::Object) {
                 return std::get<JsonObject>(value);
             }
-            throw std::runtime_error("Json is not an Object");
+            throw r_utils::exception::JsonElementException("Json is not an Object");
         }
 
 

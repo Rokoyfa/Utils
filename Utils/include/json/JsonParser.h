@@ -16,8 +16,8 @@ namespace r_utils
 		public:
 			JsonParser() = default;
 
-			static JsonObject parse(std::string input);
-			static JsonObject parse(const r_utils::io::File file);
+			static JsonElement parse(const std::string& input);
+			static JsonElement parse(const r_utils::io::File& file);
 
 		private:
 			explicit JsonParser(std::string input);

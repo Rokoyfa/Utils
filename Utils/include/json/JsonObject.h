@@ -19,9 +19,9 @@ namespace r_utils {
             bool contains(const std::string& key) const;
             r_utils::json::JsonElement get(const std::string& key) const;
             r_utils::json::JsonElement get(const int index) const;
-            r_utils::json::JsonObject set(const std::string& key, const r_utils::json::JsonElement& value);
-            void remove(const std::string& key);
-            std::unordered_map<std::string, r_utils::json::JsonElement> getValues() const;
+            r_utils::json::JsonObject& set(const std::string& key, const r_utils::json::JsonElement& value);
+            [[noreturn]] void remove(const std::string& key);
+            const std::unordered_map<std::string, r_utils::json::JsonElement>& getValues() const;
 
             size_t size() const;
 

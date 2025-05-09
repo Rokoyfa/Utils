@@ -7,7 +7,10 @@
 #include "json/Json.h"
 #include "file/File.h"
 
+#include "exception/file/FileException.h"
+
 int main() {
+    /*
     try {
         // Path to the JSON file
         std::string filePath = "storage/storage.json";
@@ -65,6 +68,50 @@ int main() {
     catch (const std::exception& e) {
         std::cerr << "\nError during application execution: " << e.what() << std::endl;
     }
+    
 
+
+    try {
+
+        std::ifstream file("nicht_existierende_datei.txt");
+        if (!file.is_open()) {
+            throw r_utils::exception::FileException("Datei konnte nicht geöffnet werden.");
+        }
+
+        // Beispiel für eine weitere Exception
+        std::string content;
+        file >> content;
+        if (content.empty()) {
+        }
+
+        std::cout << "Inhalt: " << content << std::endl;
+    }
+    catch (const r_utils::exception::Exception& ex) {
+        std::cerr << "[Fehler]: " << ex.what() << std::endl;
+    }
+    catch (const std::exception& ex) {
+        std::cerr << "[std::exception]: " << ex.what() << std::endl;
+    }
+
+    */
+
+
+    std::string json = "{\"name\":\"Marc\",\"langs\":[\"cpp\",\"java\",\"python\"],\"obj\":{\"döner\":\"lecker\"}}";
+    r_utils::json::Json jsn = r_utils::json::Json().parse(json);
+    
+    r_utils::json::JsonObject obj = jsn.asObject();
+    r_utils::json::JsonObject obj2 = obj.get("obj").asObject();
+    std::cout << obj << std::endl;
+    std::cout << obj2 << std::endl;
+
+    std::string input = "[\"Hello\", 123, true, null, {\"key\": \"value\"}]";
+    r_utils::json::Json test2 = r_utils::json::Json::parse(input);
+
+    if (test2.isArray()) {
+        std::cout << "Parsed Array: " << test2.toString() << std::endl;
+        auto arr = test2.asArray();
+        std::cout << "Size: " << arr.size() << std::endl;
+        std::cout << "Element 0: " << arr[0].asString() << std::endl;
+    }
     return 0;
 }

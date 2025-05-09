@@ -139,12 +139,22 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\all.h" />
+    <ClInclude Include="include\exception\Exception.h" />
+    <ClInclude Include="include\exception\ExceptionMakro.h" />
+    <ClInclude Include="include\exception\file\FileException.h" />
+    <ClInclude Include="include\exception\json\JsonArrayException.h" />
+    <ClInclude Include="include\exception\json\JsonElementException.h" />
+    <ClInclude Include="include\exception\json\JsonObjectException.h" />
+    <ClInclude Include="include\exception\json\JsonParserException.h" />
     <ClInclude Include="include\file\File.h" />
     <ClInclude Include="include\json\Json.h" />
     <ClInclude Include="include\json\JsonArray.h" />
     <ClInclude Include="include\json\JsonElement.h" />
     <ClInclude Include="include\json\JsonObject.h" />
     <ClInclude Include="include\json\JsonParser.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

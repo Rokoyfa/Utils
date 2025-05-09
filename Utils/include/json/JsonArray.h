@@ -15,14 +15,16 @@ namespace r_utils
 		public:
 			JsonArray() = default;
 
-			r_utils::json::JsonArray add(const r_utils::json::JsonElement& element);
-			r_utils::json::JsonArray remove(const r_utils::json::JsonElement& element);
+			r_utils::json::JsonArray& add(const r_utils::json::JsonElement& element);
+			r_utils::json::JsonArray& remove(const r_utils::json::JsonElement& element);
+			const r_utils::json::JsonElement& get(int index) const;
 			size_t size() const;
 			bool empty() const;
 
 			const std::vector<r_utils::json::JsonElement>& getValues() const;
 			const std::string toString() const;
 
+			const r_utils::json::JsonElement& operator[](int index) const;
 		private:
 			std::vector<r_utils::json::JsonElement> values;
 		};

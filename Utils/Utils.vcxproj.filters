@@ -13,51 +13,96 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Quelldateien\Json">
+      <UniqueIdentifier>{01f598bf-4a04-4d47-8f52-c29552e55662}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\File">
+      <UniqueIdentifier>{43c44fd2-183a-4532-b308-87d87dd91ab1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\Json">
+      <UniqueIdentifier>{a7865b5f-6677-4237-bbe4-d4b76c866472}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\File">
+      <UniqueIdentifier>{e8e13e02-0d2f-41b8-96ab-b081350db94e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\Exception">
+      <UniqueIdentifier>{06849c51-1b44-404a-81a4-723759700d3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\Exception\File">
+      <UniqueIdentifier>{0163964c-e745-49a3-8c15-9d20d5d73680}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\Exception\Json">
+      <UniqueIdentifier>{fd984f34-995f-4e5b-b140-a39b4780e9c4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="tests\main.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="src\file\File.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="src\json\JsonElement.cpp">
-      <Filter>Quelldateien</Filter>
+    <ClCompile Include="src\json\JsonParser.cpp">
+      <Filter>Quelldateien\Json</Filter>
     </ClCompile>
     <ClCompile Include="src\json\JsonObject.cpp">
-      <Filter>Quelldateien</Filter>
+      <Filter>Quelldateien\Json</Filter>
     </ClCompile>
-    <ClCompile Include="src\json\JsonParser.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="src\json\Json.cpp">
-      <Filter>Quelldateien</Filter>
+    <ClCompile Include="src\json\JsonElement.cpp">
+      <Filter>Quelldateien\Json</Filter>
     </ClCompile>
     <ClCompile Include="src\json\JsonArray.cpp">
-      <Filter>Quelldateien</Filter>
+      <Filter>Quelldateien\Json</Filter>
+    </ClCompile>
+    <ClCompile Include="src\json\Json.cpp">
+      <Filter>Quelldateien\Json</Filter>
+    </ClCompile>
+    <ClCompile Include="src\file\File.cpp">
+      <Filter>Quelldateien\File</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\all.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="include\file\File.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="include\json\JsonElement.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="include\json\JsonObject.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="include\json\JsonParser.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="include\json\Json.h">
-      <Filter>Headerdateien</Filter>
+      <Filter>Headerdateien\Json</Filter>
     </ClInclude>
     <ClInclude Include="include\json\JsonArray.h">
-      <Filter>Headerdateien</Filter>
+      <Filter>Headerdateien\Json</Filter>
     </ClInclude>
+    <ClInclude Include="include\json\JsonElement.h">
+      <Filter>Headerdateien\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="include\json\JsonObject.h">
+      <Filter>Headerdateien\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="include\json\JsonParser.h">
+      <Filter>Headerdateien\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="include\file\File.h">
+      <Filter>Headerdateien\File</Filter>
+    </ClInclude>
+    <ClInclude Include="include\exception\Exception.h">
+      <Filter>Headerdateien\Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="include\exception\ExceptionMakro.h">
+      <Filter>Headerdateien\Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="include\exception\file\FileException.h">
+      <Filter>Headerdateien\Exception\File</Filter>
+    </ClInclude>
+    <ClInclude Include="include\exception\json\JsonElementException.h">
+      <Filter>Headerdateien\Exception\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="include\exception\json\JsonObjectException.h">
+      <Filter>Headerdateien\Exception\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="include\exception\json\JsonArrayException.h">
+      <Filter>Headerdateien\Exception\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="include\exception\json\JsonParserException.h">
+      <Filter>Headerdateien\Exception\Json</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>

@@ -1,21 +1,23 @@
 #include "json/JsonParser.h"
 
+#include "exception/json/JsonParserException.h"
+
 namespace r_utils
 {
 	namespace json
 	{
 
-		JsonObject JsonParser::parse(std::string input)
+		JsonElement JsonParser::parse(const std::string& input)
 		{
 			JsonParser parser(input);
-			return parser.parseObject();
+			return parser.parseValue();
 		}
 
-		JsonObject JsonParser::parse(const r_utils::io::File file)
+		JsonElement JsonParser::parse(const r_utils::io::File& file)
 		{
 			if (!file.exists())
 			{
-				throw std::runtime_error("File not found: " + file.getFilePath());
+				throw r_utils::exception::JsonParserException("Failed to Parse file: " + file.getFilePath());
 			}
 			return parse(file.read().c_str());
 		}
@@ -59,7 +61,7 @@ namespace r_utils
 			if (c == '{') return parseObject();
 			if (c == '[') return parseArray();
 
-			throw std::runtime_error("Unexpected token: " + std::string(1, c));
+			throw r_utils::exception::JsonParserException("Unexpected token: " + std::string(1, c));
 		}
 
 		JsonElement JsonParser::parseNull()
@@ -68,7 +70,7 @@ namespace r_utils
 				pos += 4;
 				return JsonElement(nullptr);
 			}
-			throw std::runtime_error("Invalid null value");
+			throw r_utils::exception::JsonParserException("Invalid null value");
 		}
 
 		JsonElement JsonParser::parseBool()
@@ -81,7 +83,7 @@ namespace r_utils
 				pos += 5;
 				return JsonElement(false);
 			}
-			throw std::runtime_error("Invalid boolean value");
+			throw r_utils::exception::JsonParserException("Invalid boolean value");
 		}
 
 		JsonElement JsonParser::parseNumber()
@@ -127,7 +129,7 @@ namespace r_utils
 			JsonArray array;
 
 			if (next() != '[')
-				throw std::runtime_error("Expected '[' to start array");
+				throw r_utils::exception::JsonParserException("Expected '[' to start array");
 
 			skipWhitespace();
 			if (peek() == ']') {
@@ -135,20 +137,26 @@ namespace r_utils
 				return array;
 			}
 
-			while (true) {
+			while (!eof()) {
 				skipWhitespace();
 				JsonElement element = parseValue();
 				array.add(element);
 
 				skipWhitespace();
-				char ch = next();
+				if (eof())
+					throw r_utils::exception::JsonParserException("Unexpected end of input in array");
 
+				char ch = next();
 				if (ch == ']') {
 					break;
 				}
 				else if (ch != ',') {
-					throw std::runtime_error("Expected ',' or ']' in array");
+					throw r_utils::exception::JsonParserException("Expected ',' or ']' in array, got '" + std::string(1, ch) + "'");
 				}
+			}
+
+			if (eof()) {
+				throw r_utils::exception::JsonParserException("Unterminated array");
 			}
 
 			return array;
@@ -159,7 +167,7 @@ namespace r_utils
 			JsonObject obj;
 
 			if (next() != '{') {
-				throw std::runtime_error("Expected '{'");
+				throw r_utils::exception::JsonParserException("Expected '{'");
 			}
 
 			skipWhitespace();
@@ -175,7 +183,7 @@ namespace r_utils
 
 				skipWhitespace();
 				if (next() != ':') {
-					throw std::runtime_error("Expected ':' after key");
+					throw r_utils::exception::JsonParserException("Expected ':' after key");
 				}
 
 				skipWhitespace();
@@ -192,7 +200,7 @@ namespace r_utils
 					next();
 					break;
 				}
-				throw std::runtime_error("Expected ',' or '}' in object");
+				throw r_utils::exception::JsonParserException("Expected ',' or '}' in object");
 			}
 
 			return obj;
