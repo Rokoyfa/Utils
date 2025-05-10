@@ -33,12 +33,13 @@ namespace r_utils {
             JsonElement(int value);
             JsonElement(double value);
             JsonElement(bool value);
+            JsonElement(nullptr_t value);
             JsonElement(const r_utils::json::JsonArray& value);
             JsonElement(const r_utils::json::JsonObject& value);
 
             [[nodiscard]] JsonType getType() const;
             [[nodiscard]] std::string stringify() const;
-            [[nodiscard]] std::variant<std::monostate, std::string, int, double, bool, r_utils::json::JsonObject, r_utils::json::JsonArray> getValue() const;
+            [[nodiscard]] std::variant<std::monostate, std::string, int, double, bool, nullptr_t, r_utils::json::JsonObject, r_utils::json::JsonArray> getValue() const;
 
             [[nodiscard]] bool isNull() const;
             [[nodiscard]] bool isString() const;
@@ -57,7 +58,7 @@ namespace r_utils {
 
         private:
             JsonType type;
-            std::variant<std::monostate, std::string, int, double, bool, r_utils::json::JsonObject, r_utils::json::JsonArray> value;
+            std::variant<std::monostate, std::string, int, double, bool, nullptr_t, r_utils::json::JsonObject, r_utils::json::JsonArray> value;
         };
 
     }

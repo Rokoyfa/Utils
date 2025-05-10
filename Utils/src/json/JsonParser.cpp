@@ -155,10 +155,6 @@ namespace r_utils
 				}
 			}
 
-			if (eof()) {
-				throw r_utils::exception::JsonParserException("Unterminated array");
-			}
-
 			return array;
 		}
 

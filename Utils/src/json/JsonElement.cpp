@@ -24,6 +24,9 @@ namespace r_utils {
         JsonElement::JsonElement(bool value)
             : type(JsonType::Boolean), value(value) {}
 
+        JsonElement::JsonElement(nullptr_t value)
+            : type(JsonType::Null), value(value) {}
+
         JsonElement::JsonElement(const r_utils::json::JsonArray& value)
             : type(JsonType::Array), value(value) {}
 
@@ -56,7 +59,7 @@ namespace r_utils {
             }
         }
 
-        std::variant <std::monostate, std::string, int, double, bool, r_utils::json::JsonObject, r_utils::json::JsonArray> JsonElement::getValue() const
+        std::variant <std::monostate, std::string, int, double, bool, nullptr_t, r_utils::json::JsonObject, r_utils::json::JsonArray> JsonElement::getValue() const
         {
             return this->value;
         }

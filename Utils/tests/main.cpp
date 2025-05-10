@@ -95,7 +95,7 @@ int main() {
 
     */
 
-
+    /*
     std::string json = "{\"name\":\"Marc\",\"langs\":[\"cpp\",\"java\",\"python\"],\"obj\":{\"döner\":\"lecker\"}}";
     r_utils::json::Json jsn = r_utils::json::Json().parse(json);
     
@@ -103,15 +103,25 @@ int main() {
     r_utils::json::JsonObject obj2 = obj.get("obj").asObject();
     std::cout << obj << std::endl;
     std::cout << obj2 << std::endl;
+    */
+    try
+    {
+        std::string input = "[\"Hello\", 123, true, null, {\"key\": \"value\"}]";
+        r_utils::json::Json test2 = r_utils::json::Json::parse(input);
 
-    std::string input = "[\"Hello\", 123, true, null, {\"key\": \"value\"}]";
-    r_utils::json::Json test2 = r_utils::json::Json::parse(input);
+        if (test2.isArray()) {
+            std::cout << "Parsed Array: " << test2.toString() << std::endl;
+            auto arr = test2.asArray();
+            std::cout << "Size: " << arr.size() << std::endl;
+            std::cout << "Element 0: " << arr[0].asString() << std::endl;
 
-    if (test2.isArray()) {
-        std::cout << "Parsed Array: " << test2.toString() << std::endl;
-        auto arr = test2.asArray();
-        std::cout << "Size: " << arr.size() << std::endl;
-        std::cout << "Element 0: " << arr[0].asString() << std::endl;
+            r_utils::json::JsonArray obj = arr[4].asArray();
+            std::cout << obj << std::endl;
+        }
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << e.what();
     }
     return 0;
 }
