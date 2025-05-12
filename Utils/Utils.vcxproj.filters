@@ -34,6 +34,12 @@
     <Filter Include="Headerdateien\Exception\Json">
       <UniqueIdentifier>{fd984f34-995f-4e5b-b140-a39b4780e9c4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headerdateien\logger">
+      <UniqueIdentifier>{fd5690b1-0e5e-4c09-8e8a-b755690d4a67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\logger">
+      <UniqueIdentifier>{28216317-c115-4d1d-8fef-d50363311011}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="tests\main.cpp">
@@ -56,6 +62,12 @@
     </ClCompile>
     <ClCompile Include="src\file\File.cpp">
       <Filter>Quelldateien\File</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RUtils.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="src\logger\Logger.cpp">
+      <Filter>Quelldateien\logger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -100,6 +112,12 @@
     </ClInclude>
     <ClInclude Include="include\exception\json\JsonParserException.h">
       <Filter>Headerdateien\Exception\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RUtils.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="include\logger\Logger.h">
+      <Filter>Headerdateien\logger</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

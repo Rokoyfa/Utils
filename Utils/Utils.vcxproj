@@ -116,7 +116,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(ProjectDir)/include</AdditionalIncludeDirectories>
@@ -135,6 +135,8 @@
     <ClCompile Include="src\json\JsonElement.cpp" />
     <ClCompile Include="src\json\JsonObject.cpp" />
     <ClCompile Include="src\json\JsonParser.cpp" />
+    <ClCompile Include="src\logger\Logger.cpp" />
+    <ClCompile Include="src\RUtils.cpp" />
     <ClCompile Include="tests\main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -152,6 +154,8 @@
     <ClInclude Include="include\json\JsonElement.h" />
     <ClInclude Include="include\json\JsonObject.h" />
     <ClInclude Include="include\json\JsonParser.h" />
+    <ClInclude Include="include\logger\Logger.h" />
+    <ClInclude Include="include\RUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
