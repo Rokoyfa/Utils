@@ -129,7 +129,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\event\Event.cpp" />
     <ClCompile Include="src\file\File.cpp" />
+    <ClCompile Include="src\gui\Application.cpp" />
+    <ClCompile Include="src\gui\interface\Interface.cpp" />
+    <ClCompile Include="src\gui\Window.cpp" />
+    <ClCompile Include="src\gui\Window_linux.cpp" />
+    <ClCompile Include="src\gui\Window_mac.cpp" />
+    <ClCompile Include="src\gui\Window_win.cpp" />
     <ClCompile Include="src\json\Json.cpp" />
     <ClCompile Include="src\json\JsonArray.cpp" />
     <ClCompile Include="src\json\JsonElement.cpp" />
@@ -141,14 +148,21 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\all.h" />
+    <ClInclude Include="include\event\Event.h" />
     <ClInclude Include="include\exception\Exception.h" />
+    <ClInclude Include="include\exception\ExceptionInclude.h" />
     <ClInclude Include="include\exception\ExceptionMakro.h" />
     <ClInclude Include="include\exception\file\FileException.h" />
+    <ClInclude Include="include\exception\gui\WindowApplicationException.h" />
+    <ClInclude Include="include\exception\gui\WindowException.h" />
     <ClInclude Include="include\exception\json\JsonArrayException.h" />
     <ClInclude Include="include\exception\json\JsonElementException.h" />
     <ClInclude Include="include\exception\json\JsonObjectException.h" />
     <ClInclude Include="include\exception\json\JsonParserException.h" />
     <ClInclude Include="include\file\File.h" />
+    <ClInclude Include="include\gui\Application.h" />
+    <ClInclude Include="include\gui\interface\Interface.h" />
+    <ClInclude Include="include\gui\Window.h" />
     <ClInclude Include="include\json\Json.h" />
     <ClInclude Include="include\json\JsonArray.h" />
     <ClInclude Include="include\json\JsonElement.h" />

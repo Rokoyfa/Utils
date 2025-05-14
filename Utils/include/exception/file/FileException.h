@@ -1,7 +1,6 @@
 #pragma once
 
-#include "exception/Exception.h"
-#include "exception/ExceptionMakro.h"
+#include "exception/ExceptionInclude.h"
 
 namespace r_utils
 {

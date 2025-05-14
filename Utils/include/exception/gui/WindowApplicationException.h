@@ -6,6 +6,6 @@ namespace r_utils
 {
 	namespace exception
 	{
-		DEFINE_EXCEPTION(JsonObjectException)
+		DEFINE_EXCEPTION(WindowApplicationException);
 	}
 }

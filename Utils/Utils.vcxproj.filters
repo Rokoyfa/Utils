@@ -40,6 +40,30 @@
     <Filter Include="Quelldateien\logger">
       <UniqueIdentifier>{28216317-c115-4d1d-8fef-d50363311011}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headerdateien\GUI">
+      <UniqueIdentifier>{f3689754-d174-4bb9-a2e3-e40126740ac0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\GUI">
+      <UniqueIdentifier>{2b50770f-ee3f-4073-afc1-dc9679b0b0d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\Exception\GUI">
+      <UniqueIdentifier>{d12b2100-f664-4e3c-832b-a98cc19c0165}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\GUI\Interface">
+      <UniqueIdentifier>{34cf5333-30c5-413e-835b-78d3840a81ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\Exception\GUI\Interface">
+      <UniqueIdentifier>{21377be3-d9e3-47fd-8d62-f2acb1df5d4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\GUI\Interface">
+      <UniqueIdentifier>{64e63a82-b089-409b-9f84-4d8601548345}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\Event">
+      <UniqueIdentifier>{b95a215f-27a5-418c-ac58-02b4e6d1c979}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\Event">
+      <UniqueIdentifier>{acc7ae28-7f61-4454-99ae-4290a943b7f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="tests\main.cpp">
@@ -68,6 +92,27 @@
     </ClCompile>
     <ClCompile Include="src\logger\Logger.cpp">
       <Filter>Quelldateien\logger</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gui\Window_win.cpp">
+      <Filter>Quelldateien\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gui\Application.cpp">
+      <Filter>Quelldateien\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\event\Event.cpp">
+      <Filter>Quelldateien\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gui\interface\Interface.cpp">
+      <Filter>Quelldateien\GUI\Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gui\Window.cpp">
+      <Filter>Quelldateien\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gui\Window_mac.cpp">
+      <Filter>Quelldateien\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gui\Window_linux.cpp">
+      <Filter>Quelldateien\GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +163,27 @@
     </ClInclude>
     <ClInclude Include="include\logger\Logger.h">
       <Filter>Headerdateien\logger</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gui\Application.h">
+      <Filter>Headerdateien\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gui\Window.h">
+      <Filter>Headerdateien\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\exception\gui\WindowException.h">
+      <Filter>Headerdateien\Exception\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\exception\gui\WindowApplicationException.h">
+      <Filter>Headerdateien\Exception\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\exception\ExceptionInclude.h">
+      <Filter>Headerdateien\Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="include\event\Event.h">
+      <Filter>Headerdateien\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gui\interface\Interface.h">
+      <Filter>Headerdateien\GUI\Interface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
