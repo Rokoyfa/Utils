@@ -132,6 +132,7 @@
     <ClCompile Include="src\event\Event.cpp" />
     <ClCompile Include="src\file\File.cpp" />
     <ClCompile Include="src\gui\Application.cpp" />
+    <ClCompile Include="src\gui\Application_win.cpp" />
     <ClCompile Include="src\gui\interface\Interface.cpp" />
     <ClCompile Include="src\gui\Window.cpp" />
     <ClCompile Include="src\gui\Window_linux.cpp" />

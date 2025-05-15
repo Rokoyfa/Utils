@@ -18,8 +18,8 @@ namespace r_utils
 			// No specific delegate methods at the moment
 			@end
 
-			Window::Window(const std::string& title, int width, int height, bool expandable)
-			: __title__(title), __width__(width), __height__(height), __isExpandable__(expandable), __isVisible__(false), __nsWindow__(nullptr)
+			Window::Window(std::string id, const std::string& title, int width, int height, bool expandable)
+			: __id__(id), __title__(title), __width__(width), __height__(height), __isExpandable__(expandable), __isVisible__(false), __nsWindow__(nullptr)
 		{
 			NSRect windowRect = NSMakeRect(0, 0, width, height);
 

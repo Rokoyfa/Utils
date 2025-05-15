@@ -10,8 +10,9 @@ r_utils::RUtils utils = r_utils::RUtils::create()
 
 int main() {
     try {
-        r_utils::gui::Window mainWindow("Test", 800, 600, false);
+        r_utils::gui::Window mainWindow("Test", "Test", 800, 600, false);
         mainWindow.show();
+        mainWindow.updateWindow();
 
         // Hier fehlt die Haupt-Event-Schleife. Die Anwendung würde normalerweise sofort beendet werden.
         // Für einen ersten Test sollte das Fenster aber kurz angezeigt werden, bevor das Programm terminiert.

@@ -114,6 +114,9 @@
     <ClCompile Include="src\gui\Window_linux.cpp">
       <Filter>Quelldateien\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="src\gui\Application_win.cpp">
+      <Filter>Quelldateien\GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\all.h">
