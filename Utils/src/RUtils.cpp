@@ -12,11 +12,11 @@ namespace r_utils
 		{
 			if (__useGUILogger__) {
 				std::cout << "Initializing RUtils with GUI Logger" << std::endl;
-				__logger__ = r_utils::logger::Logger(true);
+				__logger__ = std::make_unique<r_utils::logger::Logger>(true);
 			}
 			else {
 				std::cout << "Initializing RUtils with Console Logger" << std::endl;
-				__logger__ = r_utils::logger::Logger(false);
+				__logger__ = std::make_unique<r_utils::logger::Logger>(false);
 			}
 		}
 	}
@@ -26,9 +26,9 @@ namespace r_utils
 		return __isInitialized__;
 	}
 
-	r_utils::logger::Logger& RUtils::getLogger()
+	r_utils::logger::Logger* RUtils::getLogger()
 	{
-		return __logger__;
+		return __logger__.get();
 	}
 
 	RUtils& RUtils::operator=(RUtils& util)

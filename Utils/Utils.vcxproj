@@ -170,6 +170,7 @@
     <ClInclude Include="include\json\JsonObject.h" />
     <ClInclude Include="include\json\JsonParser.h" />
     <ClInclude Include="include\logger\Logger.h" />
+    <ClInclude Include="include\logger\LoggerMakro.h" />
     <ClInclude Include="include\RUtils.h" />
   </ItemGroup>
   <ItemGroup>

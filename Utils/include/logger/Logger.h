@@ -27,6 +27,9 @@ namespace r_utils
 			void debug(const std::string& msg) const;
 			void debug(const char* msg) const;
 
+			void warn(const std::string& msg) const;
+			void warn(const char* msg) const;
+
 			void error(const std::string& msg, ErrorType type = ErrorType::UNKNOWN_ERROR);
 			void error(const char* msg, ErrorType type = ErrorType::UNKNOWN_ERROR);
 

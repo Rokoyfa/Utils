@@ -20,8 +20,6 @@ namespace r_utils
 			Window(std::string id, const std::string& title, int width = 600, int height = 600, bool expandable = true);
 			virtual ~Window();
 
-			void updateWindow(MSG msg);
-
 			void show();
 			void hide();
 			void close();
@@ -54,10 +52,16 @@ namespace r_utils
 			
 			std::vector<r_utils::gui::Interface*> __children__;
 			std::unordered_map<std::string, std::vector<EventCallback>> __listeners__;
+
+			void updateWindow(MSG& msg);
 #ifdef _WIN32
 			HWND __hwnd__;
 
 		public:
+			static std::unordered_map<HWND, Window*> __windowMap__;
+			static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+			bool createWinWindow();
+
 			const HWND& getHWND() const;
 #endif
 #ifdef __linux__

@@ -1,31 +1,57 @@
 #include <iostream>
 #include <string>
+#include <thread>
+#include <chrono>
 
-#include "RUtils.h";
+#include "RUtils.h"
 #include "gui/Window.h"
+#include "gui/Application.h"
 
-r_utils::RUtils utils = r_utils::RUtils::create()
-    .withLogger()
-    .initialize();
+extern r_utils::RUtils utils;
+
+// Definiere eine benutzerdefinierte Fensterklasse
+class MeinFenster : public r_utils::gui::Window {
+public:
+    MeinFenster(std::string id, const std::string& title) : r_utils::gui::Window(id, title) {
+        // Todo: With Logger implimentation
+    }
+
+    void handleEvent(r_utils::events::Event& event) override {
+        r_utils::gui::Window::handleEvent(event);
+    }
+
+    void draw() override {
+
+    }
+};
 
 int main() {
-    try {
-        r_utils::gui::Window mainWindow("Test", "Test", 800, 600, false);
-        mainWindow.show();
-        mainWindow.updateWindow();
+    // Initialisiere RUtils (Logger, etc.)
+    r_utils::RUtils utils = r_utils::RUtils::create()
+        .withLogger()
+        .initialize();
 
-        // Hier fehlt die Haupt-Event-Schleife. Die Anwendung würde normalerweise sofort beendet werden.
-        // Für einen ersten Test sollte das Fenster aber kurz angezeigt werden, bevor das Programm terminiert.
+    // Erstelle die Application-Instanz
+    r_utils::gui::Application app;
 
-        // Eine einfache Möglichkeit, das Fenster offen zu halten (nur für Testzwecke!):
-        std::cout << "Drücke Enter zum Beenden..." << std::endl;
-        std::cin.get();
+    // Erstelle ein oder mehrere Fenster (im Heap, damit sie nicht am Ende von main zerstört werden)
+    r_utils::gui::Window* window1 = new MeinFenster("Fenster1", "Mein Erstes Fenster");
 
+    app.registerWindow(window1);
+    std::thread appThread(static_cast<void (r_utils::gui::Application::*)()>(&r_utils::gui::Application::run), &app);
+
+    // Gib dem Benutzer eine Möglichkeit, die Anwendung zu beenden
+    std::cout << "Drücke Enter, um die Anwendung zu beenden..." << std::endl;
+    std::cin.get();
+
+    // Beende die Application
+    app.stop();
+
+    // Warte auf das Ende des Application-Threads
+    if (appThread.joinable()) {
+        appThread.join();
     }
-    catch (const std::exception& e) {
-        std::cerr << "Fehler beim Erstellen des Fensters: " << e.what() << std::endl;
-        return 1;
-    }
 
+    std::cout << "Anwendung beendet." << std::endl;
     return 0;
 }

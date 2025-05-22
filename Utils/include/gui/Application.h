@@ -3,8 +3,11 @@
 #include <unordered_map>
 #include <vector>
 #include <thread>
+#include <mutex>
+#include <chrono>
 
 #include "gui/Window.h"
+#include "logger/Logger.h"
 
 namespace r_utils
 {
@@ -13,11 +16,12 @@ namespace r_utils
 		class Application
 		{
 		public:
-			Application();
+			Application(r_utils::logger::Logger* logger = nullptr);
 			~Application();
 
 			void run();
-			void createWindow(r_utils::gui::Window* window);
+			void run(std::string& windowID);
+			void registerWindow(r_utils::gui::Window* window);
 			void removeWindow(r_utils::gui::Window* window);
 			void removeWindow(std::string windowID);
 
@@ -27,11 +31,17 @@ namespace r_utils
 
 			bool exists(r_utils::gui::Window* window) const;
 			bool exists(std::string windowID) const;
+			void stop();
 		private:
 			std::unordered_map<std::string, r_utils::gui::Window*> __windows__;
-			std::unordered_map<std::thread, r_utils::gui::Window*> __threads__;
+			std::unordered_map<std::thread::id, Window*> __threadWindows__;
+			std::atomic<bool> __running__;
+			std::vector<std::thread> __threads__;
+			std::mutex __threadsMutex__;
 
-			void runThreadWindow();
+			r_utils::logger::Logger* __logger__;
+
+			void runThreadWindow(r_utils::gui::Window* window);
 		};
 	}
 }

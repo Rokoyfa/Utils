@@ -38,6 +38,15 @@ namespace r_utils
 		}
 
 
+		void Logger::warn(const std::string& msg) const
+		{
+		}
+
+		void Logger::warn(const char* msg) const
+		{
+		}
+
+
 		void Logger::error(const std::string& msg, ErrorType type)
 		{
 		}

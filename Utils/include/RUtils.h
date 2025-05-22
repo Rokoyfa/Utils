@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include "logger/Logger.h"
 
 namespace r_utils
@@ -24,12 +25,12 @@ namespace r_utils
 		static build create();
 
 		[[nodiscard]] bool isinitialized() const;
-		r_utils::logger::Logger& getLogger();
+		r_utils::logger::Logger* getLogger();
 
 		RUtils& operator=(RUtils& util);
 	private:
 		RUtils(const build& builder);
-		r_utils::logger::Logger __logger__;
+		std::unique_ptr<r_utils::logger::Logger> __logger__;
 
 		bool __useLogger__ = false;
 		bool __useGUILogger__ = false;

@@ -188,6 +188,9 @@
     <ClInclude Include="include\gui\interface\Interface.h">
       <Filter>Headerdateien\GUI\Interface</Filter>
     </ClInclude>
+    <ClInclude Include="include\logger\LoggerMakro.h">
+      <Filter>Headerdateien\logger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
