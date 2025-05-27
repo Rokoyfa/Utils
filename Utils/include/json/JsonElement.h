@@ -61,5 +61,5 @@ namespace r_utils {
             std::variant<std::monostate, std::string, int, double, bool, nullptr_t, r_utils::json::JsonObject, r_utils::json::JsonArray> value;
         };
 
-    }
-}
+    } // json
+} // r_utils

@@ -8,6 +8,8 @@
 
 #include "gui/Window.h"
 #include "logger/Logger.h"
+//#include "event/IEventListener.h"
+//#include "event/EventDispatcher.h"
 
 namespace r_utils
 {
@@ -32,6 +34,9 @@ namespace r_utils
 			bool exists(r_utils::gui::Window* window) const;
 			bool exists(std::string windowID) const;
 			void stop();
+
+			//void onEvent(r_utils::events::Event& event) override;
+			//r_utils::events::EventDispatcher& getEventDispatcher() const;
 		private:
 			std::unordered_map<std::string, r_utils::gui::Window*> __windows__;
 			std::unordered_map<std::thread::id, Window*> __threadWindows__;
@@ -40,8 +45,9 @@ namespace r_utils
 			std::mutex __threadsMutex__;
 
 			r_utils::logger::Logger* __logger__;
+			//events::EventDispatcher __dispatcher__;
 
 			void runThreadWindow(r_utils::gui::Window* window);
 		};
-	}
-}
+	} // gui
+} // r_utils

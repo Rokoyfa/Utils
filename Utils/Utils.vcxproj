@@ -130,6 +130,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\event\Event.cpp" />
+    <ClCompile Include="src\event\EventDispatcher.cpp" />
     <ClCompile Include="src\file\File.cpp" />
     <ClCompile Include="src\gui\Application.cpp" />
     <ClCompile Include="src\gui\Application_win.cpp" />
@@ -150,6 +151,9 @@
   <ItemGroup>
     <ClInclude Include="include\all.h" />
     <ClInclude Include="include\event\Event.h" />
+    <ClInclude Include="include\event\EventDispatcher.h" />
+    <ClInclude Include="include\event\events\InputEvents.h" />
+    <ClInclude Include="include\event\IEventListener.h" />
     <ClInclude Include="include\exception\Exception.h" />
     <ClInclude Include="include\exception\ExceptionInclude.h" />
     <ClInclude Include="include\exception\ExceptionMakro.h" />
@@ -162,6 +166,8 @@
     <ClInclude Include="include\exception\json\JsonParserException.h" />
     <ClInclude Include="include\file\File.h" />
     <ClInclude Include="include\gui\Application.h" />
+    <ClInclude Include="include\gui\events\ApplicationEvents.h" />
+    <ClInclude Include="include\gui\events\WindowEvents.h" />
     <ClInclude Include="include\gui\interface\Interface.h" />
     <ClInclude Include="include\gui\Window.h" />
     <ClInclude Include="include\json\Json.h" />

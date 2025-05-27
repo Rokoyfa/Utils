@@ -37,5 +37,5 @@ namespace r_utils {
         std::ostream& operator<<(std::ostream& os, const r_utils::json::JsonObject& obj);
         bool operator==(const r_utils::json::JsonObject& x, const r_utils::json::JsonObject& y);
         bool operator!=(const r_utils::json::JsonObject& x, const r_utils::json::JsonObject& y);
-    }
-}
+    } // json
+} // r_utils

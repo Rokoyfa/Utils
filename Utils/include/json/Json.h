@@ -34,5 +34,5 @@ namespace r_utils
         private:
             JsonElement root;
         };
-    }
-}
+    } // json
+} // r_utils

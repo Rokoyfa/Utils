@@ -1,23 +1,20 @@
 #include "RUtils.h"
 #include <iostream>
 
+#include "logger/LoggerMakro.h"
+
 namespace r_utils
 {
 	RUtils::RUtils(const build& builder)
-		: __useLogger__(builder.useLogger_),
-		__useGUILogger__(builder.useGUILogger_),
+		: __useLogger__(builder.__useLogger__),
 		__isInitialized__(true)
 	{
 		if (__useLogger__)
 		{
-			if (__useGUILogger__) {
-				std::cout << "Initializing RUtils with GUI Logger" << std::endl;
-				__logger__ = std::make_unique<r_utils::logger::Logger>(true);
-			}
-			else {
-				std::cout << "Initializing RUtils with Console Logger" << std::endl;
-				__logger__ = std::make_unique<r_utils::logger::Logger>(false);
-			}
+			__logger__ = std::make_unique<r_utils::logger::Logger>();
+			__app__ = std::make_unique<r_utils::gui::Application>(__logger__.get());
+			LOG_INFO(__logger__, "RUtils initialized with Console Logger.");
+			
 		}
 	}
 
@@ -26,7 +23,12 @@ namespace r_utils
 		return __isInitialized__;
 	}
 
-	r_utils::logger::Logger* RUtils::getLogger()
+	r_utils::gui::Application* RUtils::getApplication() const
+	{
+		return __app__.get();
+	}
+
+	r_utils::logger::Logger* RUtils::getLogger() const
 	{
 		return __logger__.get();
 	}
@@ -35,16 +37,14 @@ namespace r_utils
 	{
 		__isInitialized__ = util.__isInitialized__;
 		__useLogger__ = util.__useLogger__;
-		__useGUILogger__ = util.__useGUILogger__;
 		return *this;
 	}
 
 	RUtils::build::build() {}
 
-	RUtils::build& RUtils::build::withLogger(bool withGUI)
+	RUtils::build& RUtils::build::withLogger()
 	{
-		useLogger_ = true;
-		useGUILogger_ = withGUI;
+		__useLogger__ = true;
 		return *this;
 	}
 

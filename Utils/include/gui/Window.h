@@ -3,8 +3,12 @@
 #include <string>
 #include <vector>
 #include <functional>
+
 #include "event/Event.h"
 #include "gui/interface/Interface.h"
+#include "logger/Logger.h"
+//#include "event/IEventListener.h"
+//#include "event/EventDispatcher.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -17,7 +21,8 @@ namespace r_utils
 		class Window
 		{
 		public:
-			Window(std::string id, const std::string& title, int width = 600, int height = 600, bool expandable = true);
+			Window(std::string id, const std::string& title, int width = 600, int height = 600, r_utils::logger::Logger* logger = nullptr);
+			Window(std::string id, const std::string& title, r_utils::logger::Logger* logger = nullptr);
 			virtual ~Window();
 
 			void show();
@@ -48,10 +53,10 @@ namespace r_utils
 			int __height__;
 
 			bool __isVisible__;
-			bool __isExpandable__;
 			
 			std::vector<r_utils::gui::Interface*> __children__;
 			std::unordered_map<std::string, std::vector<EventCallback>> __listeners__;
+			r_utils::logger::Logger* __logger__;
 
 			void updateWindow(MSG& msg);
 #ifdef _WIN32
@@ -71,6 +76,6 @@ namespace r_utils
 			void* __nsWindow__;
 #endif
 		};
-	}
-}
+	} // gui
+} // r_utils
 

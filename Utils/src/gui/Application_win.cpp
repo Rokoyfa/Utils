@@ -128,7 +128,7 @@ namespace r_utils
 
             LOG_INFO(__logger__, "Stopping Application...");
         }
-	}
-}
+	} // gui
+} // r_utils
 
 #endif // _WIN32

@@ -160,5 +160,5 @@ namespace r_utils
             return !(x == y);
         }
 
-    }
-}
+    } // json
+} // r_utils

@@ -25,5 +25,5 @@ namespace r_utils {
 		private:
 			std::string filePath;
 		};
-	}
-}
+	} // io
+} // r_utils

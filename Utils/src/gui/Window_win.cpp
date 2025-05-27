@@ -5,9 +5,11 @@
 #include <codecvt>
 #include <locale> 
 #include <thread>
+#include <sstream>
 
 #include "gui/Window.h"
 #include "exception/gui/WindowException.h"
+#include <logger/LoggerMakro.h>
 
 namespace r_utils
 {
@@ -15,10 +17,16 @@ namespace r_utils
     {
         std::unordered_map<HWND, Window*> Window::__windowMap__;
 
-        Window::Window(std::string id, const std::string& title, int width, int height, bool expandable)
-            : __id__(id), __title__(title), __width__(width), __height__(height), __isExpandable__(expandable), __isVisible__(true), __hwnd__(nullptr)
+        Window::Window(std::string id, const std::string& title, int width, int height, r_utils::logger::Logger* logger)
+            : __id__(id), __title__(title), __width__(width), __height__(height), __isVisible__(true), __hwnd__(nullptr), __logger__(logger)
         {
-            std::cout << "Window Object created for ID: " << __id__ << std::endl;
+            LOG_INFO(__logger__, "Window Object created for ID: " + __id__);
+        }
+
+        Window::Window(std::string id, const std::string& title, r_utils::logger::Logger* logger)
+            : __id__(id), __title__(title), __width__(600), __height__(800), __isVisible__(true), __hwnd__(nullptr), __logger__(logger)
+        {
+            LOG_INFO(__logger__, "Window Object created for ID: " + __id__);
         }
 
         Window::~Window()
@@ -46,7 +54,14 @@ namespace r_utils
             }
             else {
                 DWORD error = GetLastError();
-                std::cerr << "Failed to convert icon path '" << __iconPath__ << "' to wide char: " << error << std::endl;
+
+                std::stringstream errorMessage;
+                errorMessage << "Failed to convert icon path '"
+                    << __iconPath__.c_str()
+                    << "' to wide char: "
+                    << std::to_string(error);
+
+                LOG_ERROR(__logger__, errorMessage.str(), r_utils::logger::ErrorType::INVALID_INPUT);
                 wIconPath = L"Icon.ico"; // Fallback
             }
 
@@ -60,7 +75,13 @@ namespace r_utils
             ));
             if (!hIcon && GetLastError() != 0) {
                 DWORD error = GetLastError();
-                std::cerr << "LoadImageW for icon '" << __iconPath__ << "' failed: " << error << std::endl;
+                std::stringstream errorMessage;
+                errorMessage << "LoadImageW for icon '" 
+                    << __iconPath__ 
+                    << "' failed: " 
+                    << error;
+
+                LOG_ERROR(__logger__, errorMessage.str(), r_utils::logger::ErrorType::INVALID_INPUT);
             }
 
 
@@ -70,6 +91,7 @@ namespace r_utils
             wc.hIcon = hIcon;
             wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
             wc.lpszClassName = CLASS_NAME;
+            wc.hbrBackground = static_cast<HBRUSH>(GetStockObject(BLACK_BRUSH));
 
             std::string s_CLASS_NAME;
             int len = WideCharToMultiByte(CP_UTF8, 0, CLASS_NAME, -1, nullptr, 0, nullptr, nullptr);
@@ -80,15 +102,17 @@ namespace r_utils
 
             if (!GetClassInfoW(hInstance, CLASS_NAME, &wc))
             {
-                std::cout << "Registering window class '" << s_CLASS_NAME << "'." << std::endl;
+                LOG_INFO(__logger__, "Registering window class '" + s_CLASS_NAME + "'.");
                 if (!RegisterClassW(&wc)) {
                     DWORD error = GetLastError();
-                    std::cerr << "Error registering the Window-Class! GetLastError: " << error << std::endl;
+
+                    std::stringstream errorMessage;
+                    errorMessage << "Error registering the Window-Class! GetLastError: "
+                        << error;
+                    LOG_ERROR(__logger__, errorMessage.str(), r_utils::logger::ErrorType::UNKNOWN_ERROR);
+
                     return false;
                 }
-            }
-            else {
-                std::cout << "Window class '" << s_CLASS_NAME << "' already registered." << std::endl;
             }
 
             std::wstring wTitle;
@@ -98,8 +122,6 @@ namespace r_utils
                 MultiByteToWideChar(CP_UTF8, 0, __title__.c_str(), -1, &wTitle[0], num_chars_title);
             }
             else {
-                DWORD error = GetLastError();
-                std::cerr << "Failed to convert window title '" << __title__ << "' to wide char: " << error << std::endl;
                 wTitle = L"Default Window";
             }
 
@@ -120,10 +142,25 @@ namespace r_utils
 
             if (!__hwnd__) {
                 DWORD error = GetLastError();
-                std::cerr << "Error Creating a Windows Window for ID '" << __id__ << "'! GetLastError: " << error << std::endl;
+
+                std::stringstream errorMessage;
+                errorMessage << "Error Creating a Windows Window for ID '"
+                    << __id__
+                    << "'! GetLastError: "
+                    << error;
+                LOG_ERROR(__logger__, errorMessage.str(), r_utils::logger::ErrorType::UNKNOWN_ERROR);
+
                 return false;
             }
-            std::cout << "Window HWND created: " << __hwnd__ << " for ID: " << __id__ << " in thread: " << std::this_thread::get_id() << std::endl;
+            std::stringstream logMessage;
+            logMessage << "Window HWND created: "
+                << static_cast<void*>(__hwnd__)
+                << " for ID: "
+                << __id__
+                << " in thread: "
+                << std::this_thread::get_id();
+
+            LOG_INFO(__logger__, logMessage.str());
 
             HICON hIconSm = static_cast<HICON>(LoadImageW(
                 hInstance, wIconPath.c_str(), IMAGE_ICON, 16, 16, LR_LOADFROMFILE | LR_DEFAULTSIZE
@@ -197,11 +234,26 @@ namespace r_utils
                 case WM_CLOSE:
                 {
                     DestroyWindow(hwnd);
+                    auto it = Window::__windowMap__.find(hwnd);
+                    if (it != Window::__windowMap__.end()) {
+                        Window::__windowMap__.erase(it);
+                    }
                     return 0;
                 }
                 case WM_DESTROY:
                 {
                     return 0;
+                }
+                case WM_SIZE:
+                {
+                    int newWidth = LOWORD(lParam);
+                    int newHeight = HIWORD(lParam);
+
+                    pWindow->__width__ = newWidth;
+                    pWindow->__height__ = newHeight;
+
+                    InvalidateRect(hwnd, nullptr, TRUE);
+                    return 0; 
                 }
                 case WM_PAINT:
                 {
@@ -214,8 +266,8 @@ namespace r_utils
                 }
             }
 
-            return DefWindowProcW(hwnd, uMsg, wParam, lParam); // DefWindowProcW
+            return DefWindowProcW(hwnd, uMsg, wParam, lParam);
         }
-    }
-}
+    } // gui
+} // r_utils
 #endif // _WIN32

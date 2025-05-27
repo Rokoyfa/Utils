@@ -74,6 +74,6 @@ namespace r_utils
 		}
 	private:
 		Display* __display__ = nullptr;
-	}
-}
+	} // gui
+} // r_utils
 #endif

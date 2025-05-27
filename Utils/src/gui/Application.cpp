@@ -111,5 +111,5 @@ namespace r_utils
 			return __windows__.count(windowID) > 0;
 		}
 
-	}
-}
+	} // gui
+} // r_utils

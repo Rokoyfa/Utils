@@ -38,5 +38,5 @@ namespace r_utils
 			std::string input;
 			size_t pos;
 		};
-	}
-}
+	} // json
+} // r_utils

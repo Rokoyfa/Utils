@@ -83,5 +83,5 @@ namespace r_utils {
         std::string File::getFilePath() const {
             return filePath;
         }
-    }
-}
+    } // io
+} // r_utils

@@ -64,5 +64,5 @@ namespace r_utils {
                 }
             }*/
         }
-    }
-}
+    } // gui
+} // r_utils

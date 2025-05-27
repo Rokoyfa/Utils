@@ -79,6 +79,6 @@ namespace r_utils
 
 	private:
 		void* __nsWindow__;
-	}
-}
+	} // gui
+} // r_utils
 #endif
