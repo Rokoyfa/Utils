@@ -26,6 +26,7 @@ namespace r_utils
                     LOG_ERROR(__logger__, "Failed to create WinAPI window for ID: " + window->getID() + ". Thread will terminate.", r_utils::logger::UNKNOWN_ERROR);
                     return;
                 }
+                window->show();
             }
             catch (const r_utils::exception::WindowException& e) {
                 LOG_ERROR(__logger__, "Exception during WinAPI window creation for ID: " + window->getID() + ": " + e.what(), r_utils::logger::UNKNOWN_ERROR);
@@ -43,28 +44,21 @@ namespace r_utils
             thread_id_stream << std::this_thread::get_id();
             LOG_INFO(__logger__, "Starting in thread : " + thread_id_stream.str());
 
-            while (__running__.load()) {
-                BOOL result = PeekMessageW(&msg, window->getHWND(), 0, 0, PM_REMOVE);
-                if (result > 0) {
-                    TranslateMessage(&msg);
-                    DispatchMessageW(&msg);
-                }
-                else if (result == 0) {
-                    std::this_thread::sleep_for(std::chrono::milliseconds(1));
-                }
-                else {
-                    DWORD error = GetLastError();
-                    LOG_ERROR(__logger__, "PeekMessageW failed for window '" + window->getID() + "'. GetLastError: " + std::to_string(error), r_utils::logger::ErrorType::UNKNOWN_ERROR);
-                    break;
-                }
+            {
+                // std::lock_guard<std::mutex> lock(__threadsMutex__);
+                __threadWindows__[std::this_thread::get_id()] = window;
+            }
+
+            while (__running__.load() && GetMessageW(&msg, NULL, 0, 0) > 0) {
+                TranslateMessage(&msg);
+                DispatchMessageW(&msg);
+            }
+            {
+               // std::lock_guard<std::mutex> lock(__threadsMutex__);
+                __threadWindows__.erase(std::this_thread::get_id());
             }
             LOG_INFO(__logger__, "Thread for Window '" + window->getID() + "' stopped message loop.");
 		}
-
-        void Application::stop()
-        {
-            __running__ = false;
-        }
 
         void Application::run() {
             if (__running__.exchange(true)) {
@@ -73,10 +67,12 @@ namespace r_utils
             }
 
             LOG_INFO(__logger__, "Starting Application...");
+            __running__ = true;
+
 
             {
-                std::lock_guard<std::mutex> lock(__threadsMutex__);
-                for (auto const& [id, window] : __windows__) {                    
+                //std::lock_guard<std::mutex> lock(__threadsMutex__);
+                for (auto const& [id, window] : __windows__) {
                     std::thread threadObj(&Application::runThreadWindow, this, window);
                     __threads__.push_back(std::move(threadObj));
                     LOG_INFO(__logger__, "Thread for Window: '" + id + "' started.");
@@ -86,7 +82,7 @@ namespace r_utils
             while (__running__.load()) {
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
             }
-
+            __running__ = false;
             LOG_INFO(__logger__, "Stopping Application...");
         }
 
@@ -98,7 +94,7 @@ namespace r_utils
             }
 
             LOG_INFO(__logger__, "Starting Application with Window: '" + windowID + "'");
-
+            __running__ = true;
             Window* targetWindow = nullptr;
             {
                 std::lock_guard<std::mutex> lock(__threadsMutex__);

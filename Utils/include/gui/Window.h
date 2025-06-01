@@ -7,8 +7,11 @@
 #include "event/Event.h"
 #include "gui/interface/Interface.h"
 #include "logger/Logger.h"
-//#include "event/IEventListener.h"
-//#include "event/EventDispatcher.h"
+
+#include "event/IEventListener.h"
+#include "event/EventDispatcher.h"
+#include "gui/events/WindowEvents.h"
+#include "event/events/InputEvents.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -18,11 +21,11 @@ namespace r_utils
 {
 	namespace gui
 	{
-		class Window
+		class Window : public r_utils::events::IEventListener
 		{
 		public:
-			Window(std::string id, const std::string& title, int width = 600, int height = 600, r_utils::logger::Logger* logger = nullptr);
-			Window(std::string id, const std::string& title, r_utils::logger::Logger* logger = nullptr);
+			Window(std::string id, const std::string& title, r_utils::events::EventDispatcher& dispatcher, int width = 600, int height = 600, r_utils::logger::Logger* logger = nullptr);
+			Window(std::string id, const std::string& title, r_utils::events::EventDispatcher& dispatcher, r_utils::logger::Logger* logger = nullptr);
 			virtual ~Window();
 
 			void show();
@@ -32,19 +35,16 @@ namespace r_utils
 			void setTitle(const std::string& title);
 			void setSize(int width, int height);
 			void setVisible(bool visible);
-			void setIconPath(std::string& iconPath);
+			void setIconPath(const std::string& iconPath);
 			
 			std::string getTitle() const;
-			std::string getIcon() const;
+			std::string getIconPath() const;
 			std::vector<int> getSize() const;
 			std::string getID() const;
 
-			virtual void handleEvent(r_utils::events::Event& event);
+			virtual void onEvent(r_utils::events::Event& event) override;
 			virtual void draw();
 			void addChild(r_utils::gui::Interface* child);
-			
-			using EventCallback = std::function<void(const r_utils::events::Event&)>;
-			void addEventListener(const std::string& eventType, EventCallback callback);
 		private:
 			std::string __id__;
 			std::string __title__;
@@ -55,18 +55,20 @@ namespace r_utils
 			bool __isVisible__;
 			
 			std::vector<r_utils::gui::Interface*> __children__;
-			std::unordered_map<std::string, std::vector<EventCallback>> __listeners__;
 			r_utils::logger::Logger* __logger__;
+			r_utils::events::EventDispatcher& __dispatcher__;
 
 			void updateWindow(MSG& msg);
 #ifdef _WIN32
 			HWND __hwnd__;
+			DWORD __winThreadId__;
 
 		public:
 			static std::unordered_map<HWND, Window*> __windowMap__;
 			static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 			bool createWinWindow();
 
+			DWORD getWinThreadId() const;
 			const HWND& getHWND() const;
 #endif
 #ifdef __linux__

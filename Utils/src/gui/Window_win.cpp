@@ -17,34 +17,31 @@ namespace r_utils
     {
         std::unordered_map<HWND, Window*> Window::__windowMap__;
 
-        Window::Window(std::string id, const std::string& title, int width, int height, r_utils::logger::Logger* logger)
-            : __id__(id), __title__(title), __width__(width), __height__(height), __isVisible__(true), __hwnd__(nullptr), __logger__(logger)
+        Window::Window(std::string id, const std::string& title, r_utils::events::EventDispatcher& dispatcher, int width, int height, r_utils::logger::Logger* logger)
+            : __id__(id), __title__(title), __dispatcher__(dispatcher), __width__(width), __height__(height), __isVisible__(true), __hwnd__(nullptr), __logger__(logger)
         {
             LOG_INFO(__logger__, "Window Object created for ID: " + __id__);
+            __dispatcher__.addListener(this);
         }
 
-        Window::Window(std::string id, const std::string& title, r_utils::logger::Logger* logger)
-            : __id__(id), __title__(title), __width__(600), __height__(800), __isVisible__(true), __hwnd__(nullptr), __logger__(logger)
+        Window::Window(std::string id, const std::string& title, r_utils::events::EventDispatcher& dispatcher, r_utils::logger::Logger* logger)
+            : __id__(id), __title__(title), __dispatcher__(dispatcher), __width__(600), __height__(800), __isVisible__(true), __hwnd__(nullptr), __logger__(logger)
         {
             LOG_INFO(__logger__, "Window Object created for ID: " + __id__);
+            __dispatcher__.addListener(this);
         }
 
         Window::~Window()
         {
-            if (__hwnd__) {
-                auto it = Window::__windowMap__.find(__hwnd__);
-                if (it != Window::__windowMap__.end()) {
-                    Window::__windowMap__.erase(it);
-                }
-
-                DestroyWindow(__hwnd__);
-            }
+            __dispatcher__.removeListener(this);
         }
 
         bool Window::createWinWindow()
         {
             const wchar_t CLASS_NAME[] = L"RUtilsWindowsClass";
             HINSTANCE hInstance = GetModuleHandle(nullptr);
+
+            __winThreadId__ = GetCurrentThreadId();
 
             std::wstring wIconPath;
             int num_chars_icon = MultiByteToWideChar(CP_UTF8, 0, __iconPath__.c_str(), -1, nullptr, 0);
@@ -137,7 +134,7 @@ namespace r_utils
                 nullptr,                                // Parent window
                 nullptr,                                // Menu
                 hInstance,                              // Instance handle
-                this                                    // Pointer to window creation data (für WM_NCCREATE)
+                this                                    // Pointer to window creation data (for WM_NCCREATE)
             );
 
             if (!__hwnd__) {
@@ -152,6 +149,9 @@ namespace r_utils
 
                 return false;
             }
+
+            __windowMap__[__hwnd__] = this;
+
             std::stringstream logMessage;
             logMessage << "Window HWND created: "
                 << static_cast<void*>(__hwnd__)
@@ -193,6 +193,8 @@ namespace r_utils
             ShowWindow(static_cast<HWND>(__hwnd__), SW_SHOW);
             UpdateWindow(static_cast<HWND>(__hwnd__));
             __isVisible__ = true;
+            r_utils::gui::events::WindowShowEvent event;
+            __dispatcher__.dispatch(event);
         }
 
         void Window::hide()
@@ -202,6 +204,8 @@ namespace r_utils
             }
             ShowWindow(static_cast<HWND>(__hwnd__), SW_HIDE);
             __isVisible__ = false;
+            r_utils::gui::events::WindowHideEvent event;
+            __dispatcher__.dispatch(event);
         }
 
         void Window::close()
@@ -210,7 +214,12 @@ namespace r_utils
             {
                 throw r_utils::exception::WindowException("HWND is not Given or NULL!");
             }
-            SendMessage(__hwnd__, WM_CLOSE, 0, 0);
+            DestroyWindow(__hwnd__);
+        }
+
+        DWORD Window::getWinThreadId() const
+        {
+            return __winThreadId__;
         }
 
         const HWND& Window::getHWND() const {
@@ -219,31 +228,48 @@ namespace r_utils
 
         LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
+            /*
+            if (uMsg == WM_USER + 1 && hwnd == NULL) {
+                HWND targetHwnd = reinterpret_cast<HWND>(lParam);
+                if (targetHwnd) {
+                    DestroyWindow(targetHwnd);
+                    return 0;
+                }
+            }
+            */
+
             Window* pWindow = nullptr;
             if (uMsg == WM_NCCREATE) {
                 CREATESTRUCT* pCreate = reinterpret_cast<CREATESTRUCT*>(lParam);
                 pWindow = reinterpret_cast<Window*>(pCreate->lpCreateParams);
-                SetWindowLongPtrW(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pWindow)); // SetWindowLongPtrW
+                SetWindowLongPtrW(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pWindow));
             }
             else {
-                pWindow = reinterpret_cast<Window*>(GetWindowLongPtrW(hwnd, GWLP_USERDATA)); // GetWindowLongPtrW
+                pWindow = reinterpret_cast<Window*>(GetWindowLongPtrW(hwnd, GWLP_USERDATA));
             }
 
             if (pWindow) {
+                r_utils::logger::Logger* logger = pWindow->__logger__;
+                r_utils::events::EventDispatcher& dispatcher = pWindow->__dispatcher__;
+
                 switch (uMsg) {
+                /*
                 case WM_CLOSE:
                 {
-                    DestroyWindow(hwnd);
-                    auto it = Window::__windowMap__.find(hwnd);
-                    if (it != Window::__windowMap__.end()) {
-                        Window::__windowMap__.erase(it);
-                    }
+                    r_utils::gui::events::WindowCloseEvent event(pWindow->getID());
+                    dispatcher.dispatch(event);
                     return 0;
                 }
                 case WM_DESTROY:
                 {
+                    auto it = Window::__windowMap__.find(hwnd);
+                    if (it != Window::__windowMap__.end()) {
+                        Window::__windowMap__.erase(it);
+                    }
+                    PostQuitMessage(0);
                     return 0;
                 }
+                */
                 case WM_SIZE:
                 {
                     int newWidth = LOWORD(lParam);
@@ -252,8 +278,11 @@ namespace r_utils
                     pWindow->__width__ = newWidth;
                     pWindow->__height__ = newHeight;
 
+                    r_utils::gui::events::WindowResizeEvent event(newWidth, newHeight);
+                    dispatcher.dispatch(event);
+
                     InvalidateRect(hwnd, nullptr, TRUE);
-                    return 0; 
+                    return 0;
                 }
                 case WM_PAINT:
                 {
@@ -261,6 +290,41 @@ namespace r_utils
                     HDC hdc = BeginPaint(hwnd, &ps);
                     pWindow->draw();
                     EndPaint(hwnd, &ps);
+                    return 0;
+                }
+                case WM_KEYDOWN:
+                case WM_SYSKEYDOWN:
+                {
+                    int keyCode = static_cast<int>(wParam);
+                    bool isRepeat = (lParam & (1 << 30)) != 0;
+                    r_utils::events::KeyModifier modifiers = r_utils::events::KeyModifier::None;
+                    if (GetKeyState(VK_SHIFT) & 0x8000) modifiers = static_cast<r_utils::events::KeyModifier>(static_cast<int>(modifiers) | static_cast<int>(r_utils::events::KeyModifier::Shift));
+                    if (GetKeyState(VK_CONTROL) & 0x8000) modifiers = static_cast<r_utils::events::KeyModifier>(static_cast<int>(modifiers) | static_cast<int>(r_utils::events::KeyModifier::Control));
+                    if (GetKeyState(VK_MENU) & 0x8000) modifiers = static_cast<r_utils::events::KeyModifier>(static_cast<int>(modifiers) | static_cast<int>(r_utils::events::KeyModifier::Alt));
+
+                    r_utils::events::KeyPressedEvent event(keyCode, modifiers, isRepeat);
+                    dispatcher.dispatch(event);
+                    return 0;
+                }
+                case WM_KEYUP:
+                case WM_SYSKEYUP:
+                {
+                    int keyCode = static_cast<int>(wParam);
+                    r_utils::events::KeyModifier modifiers = r_utils::events::KeyModifier::None;
+                    if (GetKeyState(VK_SHIFT) & 0x8000) modifiers = static_cast<r_utils::events::KeyModifier>(static_cast<int>(modifiers) | static_cast<int>(r_utils::events::KeyModifier::Shift));
+                    if (GetKeyState(VK_CONTROL) & 0x8000) modifiers = static_cast<r_utils::events::KeyModifier>(static_cast<int>(modifiers) | static_cast<int>(r_utils::events::KeyModifier::Control));
+                    if (GetKeyState(VK_MENU) & 0x8000) modifiers = static_cast<r_utils::events::KeyModifier>(static_cast<int>(modifiers) | static_cast<int>(r_utils::events::KeyModifier::Alt));
+
+                    r_utils::events::KeyReleasedEvent event(keyCode, modifiers);
+                    dispatcher.dispatch(event);
+                    return 0;
+                }
+                case WM_MOVE:
+                {
+                    int x = LOWORD(lParam);
+                    int y = HIWORD(lParam);
+                    events::WindowMovedEvent event(x, y);
+                    dispatcher.dispatch(event);
                     return 0;
                 }
                 }

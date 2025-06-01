@@ -1,4 +1,5 @@
 #include "gui/Window.h"
+#include "logger/LoggerMakro.h"
 
 namespace r_utils {
     namespace gui {
@@ -15,7 +16,7 @@ namespace r_utils {
             __isVisible__ = visible;
         }
 
-        void Window::setIconPath(std::string& iconPath)
+        void Window::setIconPath(const std::string& iconPath)
         {
             __iconPath__ = iconPath;
         }
@@ -24,7 +25,7 @@ namespace r_utils {
             return __title__;
         }
 
-        std::string Window::getIcon() const
+        std::string Window::getIconPath() const
         {
             return __iconPath__;
         }
@@ -42,27 +43,27 @@ namespace r_utils {
             __children__.push_back(child);
         }
 
+        void Window::onEvent(r_utils::events::Event& event)
+        {
+            switch (event.getType())
+            {
+            case r_utils::events::EventType::WINDOW_RESIZE:
+            {
+                r_utils::gui::events::WindowResizeEvent& resizeEvent = static_cast<r_utils::gui::events::WindowResizeEvent&>(event);
+                event.setHandled(true);
+                break;
+            }
+            default:
+                break;
+            }
+        }
+
         void Window::draw() {
             for (Interface* child : __children__) {
                 if (child) {
                     break;
                 }
             }
-        }
-
-
-        void Window::addEventListener(const std::string& eventType, EventCallback callback) {
-            __listeners__[eventType].push_back(callback);
-        }
-
-        void Window::handleEvent(r_utils::events::Event& event) {
-            /*
-            auto it = __listeners__.find(event.getType());
-            if (it != __listeners__.end()) {
-                for (const auto& callback : it->second) {
-                    callback(event);
-                }
-            }*/
         }
     } // gui
 } // r_utils

@@ -8,14 +8,16 @@
 
 #include "gui/Window.h"
 #include "logger/Logger.h"
-//#include "event/IEventListener.h"
-//#include "event/EventDispatcher.h"
+#include "event/IEventListener.h"
+#include "event/EventDispatcher.h"
+#include "gui/events/WindowEvents.h"
+#include "gui/events/ApplicationEvents.h"
 
 namespace r_utils
 {
 	namespace gui
 	{
-		class Application
+		class Application : public r_utils::events::IEventListener
 		{
 		public:
 			Application(r_utils::logger::Logger* logger = nullptr);
@@ -35,8 +37,8 @@ namespace r_utils
 			bool exists(std::string windowID) const;
 			void stop();
 
-			//void onEvent(r_utils::events::Event& event) override;
-			//r_utils::events::EventDispatcher& getEventDispatcher() const;
+			void onEvent(r_utils::events::Event& event) override;
+			r_utils::events::EventDispatcher& getEventDispatcher();
 		private:
 			std::unordered_map<std::string, r_utils::gui::Window*> __windows__;
 			std::unordered_map<std::thread::id, Window*> __threadWindows__;
@@ -45,7 +47,7 @@ namespace r_utils
 			std::mutex __threadsMutex__;
 
 			r_utils::logger::Logger* __logger__;
-			//events::EventDispatcher __dispatcher__;
+			r_utils::events::EventDispatcher __dispatcher__;
 
 			void runThreadWindow(r_utils::gui::Window* window);
 		};

@@ -8,11 +8,39 @@ namespace r_utils
 	{
 		namespace events
 		{
+
+			class WindowVisibleEvent : public r_utils::events::Event
+			{
+			public:
+				WindowVisibleEvent(bool visible) : r_utils::events::Event(r_utils::events::EventType::WINDOW_VISIBLE), __visible__(visible) {}
+				bool isVisible() const { return __visible__; }
+				std::string toString() const override { return "WindowVisibleEvent"; }
+			private:
+				bool __visible__;
+			};
+
+			class WindowShowEvent : public r_utils::events::Event
+			{
+			public:
+				WindowShowEvent() : r_utils::events::Event(r_utils::events::EventType::WINDOW_SHOW) { WindowVisibleEvent(true); }
+				std::string toString() const override { return "WindowShowEvent"; }
+			};
+
+			class WindowHideEvent : public r_utils::events::Event
+			{
+			public:
+				WindowHideEvent() : r_utils::events::Event(r_utils::events::EventType::WINDOW_HIDE) { WindowVisibleEvent(false); }
+				std::string toString() const override { return "WindowHideEvent"; }
+			};
+
 			class WindowCloseEvent : public r_utils::events::Event
 			{
 			public:
-				WindowCloseEvent() :r_utils::events::Event(r_utils::events::EventType::WINDOW_CLOSE) {}
+				WindowCloseEvent(std::string WId) : r_utils::events::Event(r_utils::events::EventType::WINDOW_CLOSE), __WId__(WId) {}
 				std::string toString() const override { return "WindowCloseEvent"; }
+				std::string getId() const { return __WId__; }
+			private:
+				std::string __WId__;
 			};
 
 			class WindowResizeEvent : public r_utils::events::Event

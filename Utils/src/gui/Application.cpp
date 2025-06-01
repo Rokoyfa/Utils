@@ -14,7 +14,9 @@ namespace r_utils
 
 		Application::~Application() {
 			LOG_DEBUG(__logger__, "Destructing Application!");
-			__running__ = false;
+			__dispatcher__.removeListener(this);
+
+			LOG_DEBUG(__logger__, "1");
 			{
 				std::lock_guard<std::mutex> lock(__threadsMutex__);
 				for (auto& thread : __threads__) {
@@ -22,10 +24,13 @@ namespace r_utils
 						thread.join();
 					}
 				}
+				__threads__.clear();
 			}
+			LOG_DEBUG(__logger__, "2");
 			for (auto const& [id, window] : __windows__) {
 				delete window;
 			}
+			LOG_DEBUG(__logger__, "3");
 			__windows__.clear();
 			__threadWindows__.clear();
 		}
@@ -33,6 +38,7 @@ namespace r_utils
 
 		void Application::registerWindow(r_utils::gui::Window* window)
 		{
+			std::lock_guard<std::mutex> lock(__threadsMutex__);
 			if (exists(window->getID()))
 			{
 				LOG_ERROR(__logger__, "Error: Window with ID '" + window->getID() + "' already exists! Cannot register.", r_utils::logger::ErrorType::INVALID_INPUT);
@@ -40,7 +46,8 @@ namespace r_utils
 			}
 
 			__windows__[window->getID()] = window;
-			LOG_INFO(__logger__, "Window '" + window->getID() + "' successfully registered.");
+			__dispatcher__.addListener(window);
+			LOG_INFO(__logger__, "Window: '" + window->getID() + "' registered.");
 		}
 
 		void Application::removeWindow(r_utils::gui::Window* window)
@@ -50,24 +57,29 @@ namespace r_utils
 
 		void Application::removeWindow(std::string windowID)
 		{
-			if (!exists(windowID))
+			auto it = __windows__.find(windowID);
+			if (it == __windows__.end())
 			{
-				LOG_ERROR(__logger__, "Error: Window with ID '" + windowID + "' does not exist! Cannot remove.", r_utils::logger::ErrorType::FILE_NOT_FOUND);
-				throw r_utils::exception::WindowApplicationException("Error: Window with ID '" + windowID + "' does not exist!");
+				LOG_ERROR(__logger__, "Error: Window with ID '" + windowID + "' does not exist! Cannot remove.", r_utils::logger::ErrorType::UNKNOWN_ERROR);
+				return;
 			}
 
-			auto it = __windows__.find(windowID);
-			if (it != __windows__.end()) {
-				r_utils::gui::Window* windowToRemove = it->second;
-				__windows__.erase(it);
-				if (windowToRemove) {
-					delete windowToRemove;
-					LOG_INFO(__logger__, "Window with ID '" + windowID + "' successfully removed and deleted.");
+			r_utils::gui::Window* rmWindow = it->second;
+			/*
+			if (rmWindow && rmWindow->getHWND()) {
+				if (rmWindow->getWinThreadId() != 0)
+				{
+					PostThreadMessage(rmWindow->getWinThreadId(), WM_USER + 1, 0, reinterpret_cast<LPARAM>(rmWindow->getHWND()));
 				}
-				else {
-					LOG_WARN(__logger__, "Warning: Window with ID '" + windowID + "' found in map, but pointer was nullptr. Removed from map.");
+				else
+				{
+					DestroyWindow(rmWindow->getHWND());
 				}
+
+				__dispatcher__.removeListener(this);
 			}
+			*/
+			__dispatcher__.removeListener(rmWindow);
 		}
 
 
@@ -101,8 +113,47 @@ namespace r_utils
 		}
 
 
+		void Application::onEvent(r_utils::events::Event& event)
+		{
+			switch (event.getType()) {
+			case r_utils::events::EventType::APP_QUIT:
+			{
+				__running__ = false;
+				event.setHandled(true);
+				break;
+			}
+			/*
+			case r_utils::events::EventType::WINDOW_CLOSE:
+			{
+				r_utils::gui::events::WindowCloseEvent& closeEvent = static_cast<r_utils::gui::events::WindowCloseEvent&>(event);
+				removeWindow(closeEvent.getId());
+				event.setHandled(true);
+				break;
+			}
+			*/
+			default:
+				break;
+			}
+		}
+
+		void Application::stop()
+		{
+			if (__running__.load()) {
+				r_utils::gui::events::AppQuitEvent qevent;
+				__dispatcher__.dispatch(qevent);
+				__running__ = false;
+			}
+		}
+
+		r_utils::events::EventDispatcher& Application::getEventDispatcher()
+		{
+			return __dispatcher__;
+		}
+
+
 		bool Application::exists(r_utils::gui::Window* window) const
 		{
+			if (!window) { return false; }
 			return __windows__.count(window->getID()) > 0;
 		}
 

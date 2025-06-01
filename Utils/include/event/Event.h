@@ -15,6 +15,9 @@ namespace r_utils
 			APP_UPDATE,
 			APP_RENDER,
 			// Window Events
+			WINDOW_SHOW,
+			WINDOW_HIDE,
+			WINDOW_VISIBLE,
 			WINDOW_OPEN,
 			WINDOW_CLOSE,
 			WINDOW_RESIZE,
@@ -64,5 +67,5 @@ namespace r_utils
 			EventType __type__;
 			bool __handled__;
 		};
-	} // events
+	} // event
 } // r_utils

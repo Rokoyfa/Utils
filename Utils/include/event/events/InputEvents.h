@@ -10,7 +10,7 @@ namespace r_utils
 		{
 		public:
 			MouseMovedEvent(int x, int y)
-				: r_utils::events::Event(r_utils::events::EventType::MOUSE_MOVED), __x__(x), __y__(y) {}
+				: r_utils::events::Event(r_utils::events::EventType::MOUSE_MOVE), __x__(x), __y__(y) {}
 
 			int getX() const { return __x__; }
 			int getY() const { return __y__; }
