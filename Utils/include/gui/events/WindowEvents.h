@@ -6,6 +6,8 @@ namespace r_utils
 {
 	namespace gui
 	{
+		class Window;
+
 		namespace events
 		{
 
@@ -36,11 +38,11 @@ namespace r_utils
 			class WindowCloseEvent : public r_utils::events::Event
 			{
 			public:
-				WindowCloseEvent(std::string WId) : r_utils::events::Event(r_utils::events::EventType::WINDOW_CLOSE), __WId__(WId) {}
+				WindowCloseEvent(r_utils::gui::Window* Window) : r_utils::events::Event(r_utils::events::EventType::WINDOW_CLOSE), __window__(Window) {}
 				std::string toString() const override { return "WindowCloseEvent"; }
-				std::string getId() const { return __WId__; }
+				r_utils::gui::Window* getWindow() const { return __window__; }
 			private:
-				std::string __WId__;
+				r_utils::gui::Window* __window__;
 			};
 
 			class WindowResizeEvent : public r_utils::events::Event

@@ -23,15 +23,11 @@ public:
         switch (event.getType()) {
         case r_utils::events::EventType::WINDOW_RESIZE: 
         {
-            r_utils::gui::events::WindowResizeEvent& resizeEvent = static_cast<r_utils::gui::events::WindowResizeEvent&>(event);
-            LOG_INFO(logger_, "MeinFenster hat WindowResizeEvent empfangen");
             event.setHandled(true);
             break;
         }
         case r_utils::events::EventType::KEY_PRESSED: 
         {
-            r_utils::events::KeyPressedEvent& keyEvent = static_cast<r_utils::events::KeyPressedEvent&>(event);
-            LOG_INFO(logger_, "MeinFenster hat Tastendruck empfangen: KeyCode");
             event.setHandled(true);
             break;
         }
@@ -54,21 +50,20 @@ int main() {
     r_utils::logger::Logger* mainLogger = utils.getLogger();
     r_utils::gui::Application* app = utils.getApplication();
 
-    if (!app || !mainLogger) {
+    if (!app) {
         std::cerr << "FEHLER: RUtils, Application oder Logger konnte nicht initialisiert werden!" << std::endl;
         return 1;
     }
 
     mainLogger->enableColors(true);
 
-    LOG_INFO(mainLogger, "Anwendung und Logger erfolgreich über RUtils initialisiert.");
+    LOG_DEBUG(mainLogger, "Anwendung und Logger erfolgreich über RUtils initialisiert.");
 
-    r_utils::gui::Window* window1 = new MeinFenster("Fenster1", "Mein Erstes Fenster", mainLogger, app->getEventDispatcher());
+    r_utils::gui::Window* window1 = new MeinFenster("Fenster1", "Mein Erstes Fenster", nullptr, app->getEventDispatcher());
 
     app->registerWindow(window1);
-    LOG_INFO(mainLogger, "Fenster 'Fenster1' bei der Anwendung registriert.");
 
-    std::thread appThread(static_cast<void (r_utils::gui::Application::*)()>(&r_utils::gui::Application::run), app);
+    std::thread appThread(static_cast<void(r_utils::gui::Application::*)()>(&r_utils::gui::Application::run), app);
 
     LOG_WARN(mainLogger, "Drücke Enter, um die Anwendung zu beenden...");
     std::cin.get();

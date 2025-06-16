@@ -53,6 +53,10 @@ namespace r_utils {
                 event.setHandled(true);
                 break;
             }
+            case r_utils::events::EventType::WINDOW_CLOSE:
+            {
+                break;
+            }
             default:
                 break;
             }
@@ -62,6 +66,15 @@ namespace r_utils {
             for (Interface* child : __children__) {
                 if (child) {
                     break;
+                }
+
+                try
+                {
+                    continue;
+                }
+                catch (std::exception& e)
+                {
+                    LOG_ERROR(__logger__, "Exception drawing childs!");
                 }
             }
         }

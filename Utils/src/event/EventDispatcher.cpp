@@ -39,7 +39,6 @@ namespace r_utils
 		void EventDispatcher::dispatch(Event& event)
 		{
 			std::vector<IEventListener*> listenersCopy = __listeners__;
-
 			for (IEventListener* listener : listenersCopy) {
 				if (event.isHandled()) {
 					break;

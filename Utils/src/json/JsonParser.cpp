@@ -57,7 +57,7 @@ namespace r_utils
 			if (c == 'n') return parseNull();
 			if (c == 't' || c == 'f') return parseBool();
 			if (c == '"' || c == '\'') return parseString();
-			if ((c >= '0' && c <= '9') || c == '-') return parseNumber();
+			if ((c >= '0' && c <= '9') || c == '-' || c == '+') return parseNumber();
 			if (c == '{') return parseObject();
 			if (c == '[') return parseArray();
 

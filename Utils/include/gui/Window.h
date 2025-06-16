@@ -11,6 +11,7 @@
 #include "event/IEventListener.h"
 #include "event/EventDispatcher.h"
 #include "gui/events/WindowEvents.h"
+#include "gui/events/ApplicationEvents.h"
 #include "event/events/InputEvents.h"
 
 #ifdef _WIN32

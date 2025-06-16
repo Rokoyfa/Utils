@@ -13,7 +13,7 @@ namespace r_utils
 		{
 			__logger__ = std::make_unique<r_utils::logger::Logger>();
 			__app__ = std::make_unique<r_utils::gui::Application>(__logger__.get());
-			LOG_INFO(__logger__, "RUtils initialized with Console Logger.");
+			LOG_DEBUG(__logger__, "RUtils initialized with Console Logger.");
 			
 		}
 	}
