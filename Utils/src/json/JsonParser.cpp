@@ -66,7 +66,8 @@ namespace r_utils
 
 		JsonElement JsonParser::parseNull()
 		{
-			if (input.substr(pos, 4) == "null") {
+			if (input.substr(pos, 4) == "null") 
+			{
 				pos += 4;
 				return JsonElement(nullptr);
 			}
@@ -75,11 +76,13 @@ namespace r_utils
 
 		JsonElement JsonParser::parseBool()
 		{
-			if (input.substr(pos, 4) == "true") {
+			if (input.substr(pos, 4) == "true") 
+			{
 				pos += 4;
 				return JsonElement(true);
 			}
-			else if (input.substr(pos, 5) == "false") {
+			else if (input.substr(pos, 5) == "false") 
+			{
 				pos += 5;
 				return JsonElement(false);
 			}
@@ -91,7 +94,8 @@ namespace r_utils
 			size_t start = pos;
 			if (peek() == '-') next();
 			while (std::isdigit(peek())) next();
-			if (peek() == '.') {
+			if (peek() == '.') 
+			{
 				next();
 				while (std::isdigit(peek())) next();
 			}
@@ -103,21 +107,24 @@ namespace r_utils
 		{
 			char quote = next();
 			std::string result;
-			while (!eof()) {
+			while (!eof()) 
+			{
 				char c = next();
 				if (c == quote) break;
-				if (c == '\\') {
+				if (c == '\\') 
+				{
 					char esc = next();
 					switch (esc) {
-					case 'n': result += '\n'; break;
-					case 't': result += '\t'; break;
-					case '\\': result += '\\'; break;
-					case '"': result += '"'; break;
-					case '\'': result += '\''; break;
-					default: result += esc; break;
+						case 'n': result += '\n'; break;
+						case 't': result += '\t'; break;
+						case '\\': result += '\\'; break;
+						case '"': result += '"'; break;
+						case '\'': result += '\''; break;
+						default: result += esc; break;
 					}
 				}
-				else {
+				else 
+				{
 					result += c;
 				}
 			}
@@ -132,12 +139,14 @@ namespace r_utils
 				throw r_utils::exception::JsonParserException("Expected '[' to start array");
 
 			skipWhitespace();
-			if (peek() == ']') {
+			if (peek() == ']') 
+			{
 				next();
 				return array;
 			}
 
-			while (!eof()) {
+			while (!eof()) 
+			{
 				skipWhitespace();
 				JsonElement element = parseValue();
 				array.add(element);
@@ -147,10 +156,12 @@ namespace r_utils
 					throw r_utils::exception::JsonParserException("Unexpected end of input in array");
 
 				char ch = next();
-				if (ch == ']') {
+				if (ch == ']') 
+				{
 					break;
 				}
-				else if (ch != ',') {
+				else if (ch != ',') 
+				{
 					throw r_utils::exception::JsonParserException("Expected ',' or ']' in array, got '" + std::string(1, ch) + "'");
 				}
 			}
@@ -162,23 +173,27 @@ namespace r_utils
 		{
 			JsonObject obj;
 
-			if (next() != '{') {
+			if (next() != '{') 
+			{
 				throw r_utils::exception::JsonParserException("Expected '{'");
 			}
 
 			skipWhitespace();
-			if (peek() == '}') {
+			if (peek() == '}') 
+			{
 				next();
 				return obj;
 			}
 
-			while (!eof()) {
+			while (!eof()) 
+			{
 				skipWhitespace();
 				auto keyElement = parseString();
 				std::string key = keyElement.asString();
 
 				skipWhitespace();
-				if (next() != ':') {
+				if (next() != ':') 
+				{
 					throw r_utils::exception::JsonParserException("Expected ':' after key");
 				}
 
@@ -188,11 +203,13 @@ namespace r_utils
 				obj.set(key, value);
 
 				skipWhitespace();
-				if (peek() == ',') {
+				if (peek() == ',') 
+				{
 					next();
 					continue;
 				}
-				if (peek() == '}') {
+				if (peek() == '}') 
+				{
 					next();
 					break;
 				}

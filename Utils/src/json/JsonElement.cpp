@@ -3,59 +3,73 @@
 
 #include "exception/json/JsonElementException.h"
 
-namespace r_utils {
-    namespace json {
+namespace r_utils 
+{
+    namespace json 
+    {
 
         JsonElement::JsonElement()
-            : type(JsonType::Null), value(std::monostate{}) {}
+            : type(JsonType::Null), value(std::monostate{}) 
+        {}
 
         JsonElement::JsonElement(const std::string& value)
-            : type(JsonType::String), value(value) {}
+            : type(JsonType::String), value(value) 
+        {}
 
         JsonElement::JsonElement(const char* value)
-            : type(JsonType::String), value(std::string(value)) {}
+            : type(JsonType::String), value(std::string(value)) 
+        {}
 
         JsonElement::JsonElement(int value)
-            : type(JsonType::Int), value(value) {}
+            : type(JsonType::Int), value(value) 
+        {}
 
         JsonElement::JsonElement(double value)
-            : type(JsonType::Double), value(value) {}
+            : type(JsonType::Double), value(value) 
+        {}
 
         JsonElement::JsonElement(bool value)
-            : type(JsonType::Boolean), value(value) {}
+            : type(JsonType::Boolean), value(value) 
+        {}
 
         JsonElement::JsonElement(nullptr_t value)
-            : type(JsonType::Null), value(value) {}
+            : type(JsonType::Null), value(value) 
+        {}
 
         JsonElement::JsonElement(const r_utils::json::JsonArray& value)
-            : type(JsonType::Array), value(value) {}
+            : type(JsonType::Array), value(value) 
+        {}
 
         JsonElement::JsonElement(const r_utils::json::JsonObject& value)
-            : type(JsonType::Object), value(value) {}
+            : type(JsonType::Object), value(value) 
+        {}
 
 
-        JsonType JsonElement::getType() const {
+        JsonType JsonElement::getType() const 
+        {
             return type;
         }
 
-        std::string JsonElement::stringify() const {
-            switch (type) {
-            case JsonType::Null:
-                return "null";
-            case JsonType::String:
-                return "\"" + std::get<std::string>(value) + "\"";
-            case JsonType::Int:
-                return std::to_string(std::get<int>(value));
-            case JsonType::Double:
-                return std::to_string(std::get<double>(value));
-            case JsonType::Boolean:
-                return std::get<bool>(value) ? "true" : "false";
-            case JsonType::Array:
-                return std::get<JsonArray>(value).toString();
-            case JsonType::Object:
-                return std::get<JsonObject>(value).toString();
-            default:
-                return "null";
+        std::string JsonElement::stringify() const 
+        {
+            switch (type) 
+            {
+                case JsonType::Null:
+                    return "null";
+                case JsonType::String:
+                    return "\"" + std::get<std::string>(value) + "\"";
+                case JsonType::Int:
+                    return std::to_string(std::get<int>(value));
+                case JsonType::Double:
+                    return std::to_string(std::get<double>(value));
+                case JsonType::Boolean:
+                    return std::get<bool>(value) ? "true" : "false";
+                case JsonType::Array:
+                    return std::get<JsonArray>(value).toString();
+                case JsonType::Object:
+                    return std::get<JsonObject>(value).toString();
+                default:
+                    return "null";
             }
         }
 
@@ -64,24 +78,29 @@ namespace r_utils {
             return this->value;
         }
 
-        bool JsonElement::isNull() const {
+        bool JsonElement::isNull() const 
+        {
             return type == JsonType::Null;
         }
 
 
-        bool JsonElement::isString() const {
+        bool JsonElement::isString() const 
+        {
             return type == JsonType::String;
         }
 
-        bool JsonElement::isInt() const {
+        bool JsonElement::isInt() const 
+        {
             return type == JsonType::Int;
         }
 
-        bool JsonElement::isDouble() const {
+        bool JsonElement::isDouble() const 
+        {
             return type == JsonType::Double;
         }
 
-        bool JsonElement::isBoolean() const {
+        bool JsonElement::isBoolean() const 
+        {
             return type == JsonType::Boolean;
         }
 
@@ -90,35 +109,44 @@ namespace r_utils {
             return type == JsonType::Array;
         }
 
-        bool JsonElement::isObject() const {
+        bool JsonElement::isObject() const 
+        {
             return type == JsonType::Object;
         }
 
 
-        std::string JsonElement::asString() const {
-            if (type == JsonType::String) {
+        std::string JsonElement::asString() const 
+        {
+            if (type == JsonType::String) 
+            {
                 return std::get<std::string>(value);
             }
             throw r_utils::exception::JsonElementException("Json is not a String");
         }
 
 
-        int JsonElement::asInt() const {
-            if (type == JsonType::Int) {
+        int JsonElement::asInt() const 
+        {
+            if (type == JsonType::Int) 
+            {
                 return std::get<int>(value);
             }
             throw r_utils::exception::JsonElementException("Json is not an Int");
         }
 
-        double JsonElement::asDouble() const {
-            if (type == JsonType::Double) {
+        double JsonElement::asDouble() const 
+        {
+            if (type == JsonType::Double) 
+            {
                 return std::get<double>(value);
             }
             throw r_utils::exception::JsonElementException("Json is not a Double");
         }
 
-        bool JsonElement::asBoolean() const {
-            if (type == JsonType::Boolean) {
+        bool JsonElement::asBoolean() const 
+        {
+            if (type == JsonType::Boolean) 
+            {
                 return std::get<bool>(value);
             }
             throw r_utils::exception::JsonElementException("Json is not a Boolean");
@@ -126,14 +154,17 @@ namespace r_utils {
 
         r_utils::json::JsonArray JsonElement::asArray() const
         {
-            if (type == JsonType::Array) {
+            if (type == JsonType::Array) 
+            {
                 return std::get<JsonArray>(value);
             }
             throw r_utils::exception::JsonElementException("Json is not an Array");
         }
 
-        r_utils::json::JsonObject JsonElement::asObject() const {
-            if (type == JsonType::Object) {
+        r_utils::json::JsonObject JsonElement::asObject() const 
+        {
+            if (type == JsonType::Object) 
+            {
                 return std::get<JsonObject>(value);
             }
             throw r_utils::exception::JsonElementException("Json is not an Object");
@@ -144,14 +175,14 @@ namespace r_utils {
         {
             switch (type)
             {
-            case JsonType::Null:    os << "Null"; break;
-            case JsonType::String:  os << "String"; break;
-            case JsonType::Int:     os << "Integer"; break;
-            case JsonType::Double:  os << "Double"; break;
-            case JsonType::Boolean: os << "Boolean"; break;
-            case JsonType::Array:   os << "Array"; break;
-            case JsonType::Object:  os << "Object"; break;
-            default: os << "Unknown JsonType!"; break;
+                case JsonType::Null:    os << "Null"; break;
+                case JsonType::String:  os << "String"; break;
+                case JsonType::Int:     os << "Integer"; break;
+                case JsonType::Double:  os << "Double"; break;
+                case JsonType::Boolean: os << "Boolean"; break;
+                case JsonType::Array:   os << "Array"; break;
+                case JsonType::Object:  os << "Object"; break;
+                default: os << "Unknown JsonType!"; break;
             }
 
             return os;

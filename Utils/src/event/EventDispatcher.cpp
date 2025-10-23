@@ -16,8 +16,10 @@ namespace r_utils
 		void EventDispatcher::addListener(IEventListener* listener)
 		{
 			if (listener) {
-				for (const auto& existingListener : __listeners__) {
-					if (existingListener == listener) {
+				for (const auto& existingListener : __listeners__) 
+				{
+					if (existingListener == listener) 
+					{
 						return;
 					}
 				}
@@ -27,7 +29,8 @@ namespace r_utils
 
 		void EventDispatcher::removeListener(IEventListener* listener)
 		{
-			if (listener) {
+			if (listener) 
+			{
 				__listeners__.erase(
 					std::remove_if(__listeners__.begin(), __listeners__.end(),
 						[listener](IEventListener* l) { return l == listener; }),
@@ -40,8 +43,10 @@ namespace r_utils
 		{
 			std::vector<IEventListener*> listenersCopy = __listeners__;
 
-			for (IEventListener* listener : listenersCopy) {
-				if (event.isHandled()) {
+			for (IEventListener* listener : listenersCopy) 
+			{
+				if (event.isHandled()) 
+				{
 					break;
 				}
 				listener->onEvent(event);

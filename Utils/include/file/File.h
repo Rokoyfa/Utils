@@ -5,8 +5,10 @@
 #include <filesystem>
 
 
-namespace r_utils {
-	namespace io {
+namespace r_utils 
+{
+	namespace io 
+	{
 
 		class File
 		{
@@ -15,11 +17,11 @@ namespace r_utils {
 
 			[[nodiscard]] bool exists() const;
 			[[nodiscard]] std::string read() const;
-			bool write(std::string& content);
-			bool append(std::string& content);
+			bool write(const std::string& content) const;
+			bool append(const std::string& content) const;
 
 			bool remove();
-			bool create();
+			bool create() const;
 
 			std::string getFilePath() const;
 		private:

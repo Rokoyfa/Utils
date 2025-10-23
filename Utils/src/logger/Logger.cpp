@@ -6,7 +6,8 @@
 
 #ifdef _WIN32
 #include <windows.h>
-void enableAnsiColorsForConsole() {
+void enableAnsiColorsForConsole() 
+{
 	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	DWORD dwMode = 0;
 	GetConsoleMode(hOut, &dwMode);
@@ -19,7 +20,8 @@ namespace r_utils
 {
 	namespace logger
 	{
-		Logger::Logger() {}
+		Logger::Logger() 
+		{}
 
 		Logger::~Logger()
 		{}
@@ -36,28 +38,32 @@ namespace r_utils
 		}
 
 
-		void Logger::log(const std::string& msg) const {
+		void Logger::log(const std::string& msg) const 
+		{
 			std::stringstream ss;
 			ss << "[LOG] " << msg;
 			output(ss.str(), LogLevel::LOG);
 		}
 		void Logger::log(const char* msg) const { log(std::string(msg)); }
 
-		void Logger::info(const std::string& msg) const {
+		void Logger::info(const std::string& msg) const 
+		{
 			std::stringstream ss;
 			ss << "[INFO] " << msg;
 			output(ss.str(), LogLevel::INFO);
 		}
 		void Logger::info(const char* msg) const { info(std::string(msg)); }
 
-		void Logger::debug(const std::string& msg) const {
+		void Logger::debug(const std::string& msg) const 
+		{
 			std::stringstream ss;
 			ss << "[DEBUG] " << msg;
 			output(ss.str(), LogLevel::DEBUG);
 		}
 		void Logger::debug(const char* msg) const { debug(std::string(msg)); }
 
-		void Logger::warn(const std::string& msg) const {
+		void Logger::warn(const std::string& msg) const 
+		{
 			std::stringstream ss;
 			ss << "[WARN] " << msg;
 			output(ss.str(), LogLevel::WARN);
@@ -72,7 +78,8 @@ namespace r_utils
 		void Logger::error(const char* msg, ErrorType type) { error(std::string(msg), type); }
 
 
-		std::string getCurrentTimestamp() {
+		std::string getCurrentTimestamp() 
+		{
 			std::time_t now = std::time(nullptr);
 			std::tm tm_buf;
 #ifdef _WIN32
@@ -92,8 +99,10 @@ namespace r_utils
 			std::string colorCode = "";
 			std::string resetCode = "\x1b[0m";
 
-			if (__enableColors__) {
-				switch (level) {
+			if (__enableColors__) 
+			{
+				switch (level) 
+				{
 				case LogLevel::LOG:
 					colorCode = "\x1b[37m";
 					break;

@@ -4,8 +4,10 @@
 #include "exception/json/JsonArrayException.h"
 
 
-namespace r_utils {
-	namespace json {
+namespace r_utils 
+{
+	namespace json 
+	{
 
 		r_utils::json::JsonArray& JsonArray::add(const r_utils::json::JsonElement& element)
 		{
