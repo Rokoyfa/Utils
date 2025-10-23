@@ -6,6 +6,11 @@
 
 #ifdef _WIN32
 #include <windows.h>
+/**
+ * @brief Enables ANSI color codes for Windows console output.
+ *
+ * This function sets the console mode to allow virtual terminal sequences.
+ */
 void enableAnsiColorsForConsole() 
 {
 	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -77,8 +82,11 @@ namespace r_utils
 		}
 		void Logger::error(const char* msg, ErrorType type) { error(std::string(msg), type); }
 
-
-		std::string getCurrentTimestamp() 
+		/**
+		 * @brief Returns the current timestamp as a formatted string.
+		 * @return std::string Timestamp in "YYYY-MM-DD HH:MM:SS" format.
+		 */
+		std::string getCurrentTimestamp()
 		{
 			std::time_t now = std::time(nullptr);
 			std::tm tm_buf;

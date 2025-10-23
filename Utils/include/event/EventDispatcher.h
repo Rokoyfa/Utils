@@ -26,5 +26,5 @@ namespace r_utils
 		private:
 			std::vector<IEventListener*> __listeners__;
 		};
-	} // namespace events
-} // namespace r_utils
+	} // events
+} // r_utils

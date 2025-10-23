@@ -5,22 +5,22 @@
 #include <sstream>
 #include <filesystem>
 
-namespace r_utils 
+namespace r_utils
 {
-    namespace io 
+    namespace io
     {
 
-        File::File(std::string filePath) : filePath(std::move(filePath)) 
+        File::File(std::string filePath) : filePath(std::move(filePath))
         {
-            if (this->filePath.empty()) 
+            if (this->filePath.empty())
             {
                 throw r_utils::exception::FileException("The path to the file must not be empty.");
             }
         }
 
-        bool File::exists() const 
+        bool File::exists() const
         {
-            try 
+            try
             {
                 return std::filesystem::exists(filePath);
             }
@@ -29,10 +29,10 @@ namespace r_utils
             }
         }
 
-        std::string File::read() const 
+        std::string File::read() const
         {
             std::ifstream in(filePath);
-            if (!in.is_open()) 
+            if (!in.is_open())
             {
                 throw r_utils::exception::FileException("Failed to open file: \"" + filePath + "\"");
             }
@@ -45,12 +45,12 @@ namespace r_utils
         bool File::write(const std::string& content) const
         {
             std::ofstream out(filePath);
-            if (!out.is_open()) 
+            if (!out.is_open())
             {
                 throw r_utils::exception::FileException("Failed to open file for writing: \"" + filePath + "\"");
             }
 
-            if (!(out << content)) 
+            if (!(out << content))
             {
                 throw r_utils::exception::FileException("Error writing to file: " + filePath);
             }
@@ -61,12 +61,12 @@ namespace r_utils
         bool File::append(const std::string& content) const
         {
             std::ofstream out(filePath, std::ios::app);
-            if (!out.is_open()) 
+            if (!out.is_open())
             {
                 throw r_utils::exception::FileException("Failed to open file for appending: \"" + filePath + "\"");
             }
 
-            if (!(out << content)) 
+            if (!(out << content))
             {
                 throw r_utils::exception::FileException("Error appending to file: " + filePath);
             }
@@ -74,33 +74,32 @@ namespace r_utils
             return true;
         }
 
-
-        bool File::remove() 
+        bool File::remove()
         {
             try {
-                if (!std::filesystem::remove(filePath)) 
+                if (!std::filesystem::remove(filePath))
                 {
                     throw r_utils::exception::FileException("File could not be deleted (maybe doesn't exist): " + filePath);
                 }
                 return true;
             }
-            catch (const std::filesystem::filesystem_error& e) 
+            catch (const std::filesystem::filesystem_error& e)
             {
                 throw r_utils::exception::FileException("Error deleting the file: " + std::string(e.what()));
             }
         }
 
-        bool File::create() const 
+        bool File::create() const
         {
             std::ofstream out(filePath);
-            if (!out.is_open()) 
+            if (!out.is_open())
             {
                 throw r_utils::exception::FileException("File could not be created: " + filePath);
             }
             return true;
         }
 
-        std::string File::getFilePath() const 
+        std::string File::getFilePath() const
         {
             return filePath;
         }
