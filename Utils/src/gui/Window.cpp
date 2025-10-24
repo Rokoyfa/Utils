@@ -74,7 +74,7 @@ namespace r_utils {
                 }
                 catch (std::exception& e)
                 {
-                    LOG_ERROR(__logger__, "Exception drawing childs!");
+                    LOG_ERROR(__logger__, "Exception drawing childs!", r_utils::logger::ErrorType::UNKNOWN_ERROR);
                 }
             }
         }

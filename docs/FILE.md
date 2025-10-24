@@ -169,4 +169,12 @@ Use case: clean up temporary files.
 
 ---
 
+### 💡 Tip:
+
 > Pro Tip: You can integrate this helper class with `Logger` and `JSON` modules for easy logging of configuration files, runtime logs, and serialized objects.
+
+---
+
+📦 **Namespace:** `r_utils::io`
+👤 **Author:** Rokoyfa  
+🕓 **Last Updated:** October 2025

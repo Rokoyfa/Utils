@@ -203,6 +203,9 @@ int main() {
 
 * Implementation: `Utils/include/time/Timer.h` / `Utils/src/time/Timer.cpp`
 * Implementation: `Utils/include/time/TimeUtils.h` / `Utils/src/time/TimeUtils.cpp`
-* Examples: see `tests/` folder for end-to-end demonstrations.
 
 ---
+
+📦 **Namespace:** `r_utils::time`
+👤 **Author:** Rokoyfa  
+🕓 **Last Updated:** October 2025

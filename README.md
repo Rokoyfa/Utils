@@ -1,4 +1,4 @@
-# 🧩 RUtils — Modern Modular C++ Utility Framework
+# 🧩 RUtils — C++ Utility Framework
 
 **RUtils** is a modern, modular, and lightweight **C++20 utility framework** designed to simplify common development tasks across multiple domains such as logging, timing, JSON parsing, file handling, and more. It provides **small, self-contained modules** with clean APIs that can be easily embedded into any project — from small console tools to large backend systems.
 
@@ -131,17 +131,19 @@ std::cout << "Elapsed: " << timer.elapsedMilliseconds() << " ms\n";
 
 ### 🎯 [Event System](docs/Event.md)
 
-A lightweight event system for decoupled communication.
-Includes event base classes and a dispatcher mechanism.
-Still under development (API may change).
+Lightweight system for decoupled communication between components.
+Useful for async architectures or modular backends.
+
+>🧩 API still evolving — not yet stable.
 
 ---
 
 ### 🪟 [GUI](docs/GUI.md)
 
-Experimental cross-platform GUI for displaying basic windows.
-Implements basic `Window_*` classes for Windows, Linux, and macOS.
-Currently **not stable** and should only be used for testing.
+Basic window abstraction for GUI-based log viewing or interactive utilities.
+Cross-platform foundation for visual extensions.
+
+>⚠️ Currently experimental — not for production.
 
 ---
 
@@ -173,42 +175,6 @@ Build the desired configuration (`Debug` or `Release`).
 ### Using CMake (planned)
 
 CMake setup will be documented in `INSTALL.md` once implemented.
-
----
-
-## 🧩 Directory Structure
-
-```
-Utils/
-├── include/
-│   ├── logger/
-│   ├── file/
-│   ├── json/
-│   ├── time/
-│   ├── event/
-│   └── gui/
-├── src/
-│   ├── logger/
-│   ├── file/
-│   ├── json/
-│   ├── time/
-│   ├── event/
-│   └── gui/
-├── tests/
-│   └── maincpp
-├── CMakeLists.txt
-README.md
-LICENSE
-docs/
-├── RUtilsBuilder.md
-├── Logger.md
-├── Json.md
-├── File.md
-├── Timer.md
-├── Event.md
-├── GUI.md
-└── INSTALL.md
-```
 
 ---
 
@@ -268,3 +234,8 @@ If you have questions, suggestions, or feedback, feel free to open an issue or d
 ### ❤️ Thank you for using RUtils!
 
 If you like the project, consider giving it a ⭐ on GitHub — it helps visibility an
+
+---
+
+👤 **Author:** Rokoyfa  
+🕓 **Last Updated:** October 2025
