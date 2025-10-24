@@ -4,6 +4,9 @@ namespace r_utils
 {
 	namespace time
 	{
+		Timer::Timer()
+		{
+		}
 		Timer::Timer(const int time)
 			: __duration__(std::chrono::milliseconds(time))
 		{
@@ -38,55 +41,58 @@ namespace r_utils
 		}
 
 		Timer::~Timer()
-		{
-			if (__thread__.joinable())
-				__thread__.join();
-			stop();
-		}
+		{}
 
 		void Timer::start()
 		{
-			if (!__running__)
-			{
-				__startTime__ = std::chrono::steady_clock::now();
-				__running__ = true;
-			}
+			std::lock_guard<std::mutex> lock(__mtx__);
+			if (__running__) return;
+			
+			__startTime__ = std::chrono::steady_clock::now();
+			__running__ = true;
 		}
 
 		void Timer::startInThread()
 		{
+			std::lock_guard<std::mutex> lock(__mtx__);
 			if (__running__) return;
+
 			start();
-			__thread__ = std::thread([this]() 
-			{
-				std::this_thread::sleep_for(std::chrono::milliseconds(1));
-				this->stop();
+			__thread__ = std::jthread([this]() {
+				auto start = std::chrono::steady_clock::now();
+				while (__running__) {
+					std::this_thread::sleep_for(std::chrono::seconds(1));
+				}
+				stop();
 			});
-			__thread__.detach();
 		}
 
 		void Timer::startInThread(long long stopAfterMs)
 		{
+			std::lock_guard<std::mutex> lock(__mtx__);
 			if (__running__) return;
+
 			start();
-			__thread__ = std::thread([this, stopAfterMs]() 
+			__thread__ = std::jthread([this, stopAfterMs]() 
 			{
-				std::this_thread::sleep_for(std::chrono::milliseconds(stopAfterMs));
+				auto start = std::chrono::steady_clock::now();
+				while (__running__ && std::chrono::steady_clock::now() - start < std::chrono::milliseconds(stopAfterMs)) 
+				{
+					std::this_thread::sleep_for(std::chrono::milliseconds(100));
+				}
 				this->stop();
 			});
-			__thread__.detach();
 		}
 
 		void Timer::startInThread(std::function<void()> fallback, long long callFallback)
 		{
+			std::lock_guard<std::mutex> lock(__mtx__);
 			if (__running__) return;
 
-			__running__ = true;
-			__startTime__ = std::chrono::steady_clock::now();
-
+			start();
 			if (callFallback > 0)
 			{
-				__thread__ = std::thread([this, fallback, callFallback]() 
+				__thread__ = std::jthread([this, fallback, callFallback]() 
 				{
 					auto start = std::chrono::steady_clock::now();
 					std::this_thread::sleep_for(std::chrono::milliseconds(callFallback));
@@ -95,28 +101,28 @@ namespace r_utils
 						fallback();
 					}
 				});
-				__thread__.detach();
 			}
 		}
 
 		void Timer::stop()
 		{
-			if (__running__)
-			{
-				__endTime__ = std::chrono::steady_clock::now();
-				__duration__ += (__endTime__ - __startTime__);
-				__running__ = false;
-			}
+			std::lock_guard<std::mutex> lock(__mtx__);
+			if (!__running__) return;
+			__endTime__ = std::chrono::steady_clock::now();
+			__duration__ += (__endTime__ - __startTime__);
+			__running__ = false;
 		}	
 
 		void Timer::reset()
 		{
+			std::lock_guard<std::mutex> lock(__mtx__);
 			__duration__ = std::chrono::steady_clock::duration::zero();
 			__running__ = false;
 		}
 
 		void Timer::restart()
 		{
+			std::lock_guard<std::mutex> lock(__mtx__);
 			__duration__ = std::chrono::steady_clock::duration::zero();
 			__startTime__ = std::chrono::steady_clock::now();
 			__running__ = true;
@@ -132,15 +138,7 @@ namespace r_utils
 
 		long long Timer::elapsedMilliseconds() const
 		{
-			if (__running__)
-			{
-				auto now = std::chrono::steady_clock::now();
-				return std::chrono::duration_cast<std::chrono::milliseconds>(__duration__ + (now - __startTime__)).count();
-			}
-			else
-			{
-				return std::chrono::duration_cast<std::chrono::milliseconds>(__duration__).count();
-			}
+			return std::chrono::duration_cast<std::chrono::milliseconds>(currentDuration()).count();
 		}
 		
 		double Timer::elapsedSeconds() const
@@ -166,7 +164,10 @@ namespace r_utils
 
 		std::chrono::steady_clock::duration Timer::currentDuration() const
 		{
-			return __running__ ? __duration__ + (std::chrono::steady_clock::now() - __startTime__) : __duration__;
+			std::lock_guard<std::mutex> lock(__mtx__);
+			return __running__
+				? __duration__ + (std::chrono::steady_clock::now() - __startTime__)
+				: __duration__;
 		}
 
 	} // time

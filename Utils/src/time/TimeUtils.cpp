@@ -6,6 +6,19 @@ namespace r_utils
 {
 	namespace time
 	{
+		inline static std::string formatToString(TimeFormat format)
+		{
+			switch (format)
+			{
+			case DATE_ONLY:  return "%Y-%m-%d";
+			case TIME_ONLY:  return "%H:%M:%S";
+			case SHORT_DATE: return "%d.%m.%Y";
+			case SHORT_TIME: return "%H:%M";
+			case ISO:		 return "%Y-%m-%d %H:%M:%S";
+			default:         return "%Y-%m-%d %H:%M:%S";
+			}
+		}
+
 		std::string TimeUtils::nowString(const std::string& format)
 		{
 			auto now = std::chrono::system_clock::now();
@@ -111,19 +124,6 @@ namespace r_utils
 			localtime_r(&t, &tm_buf);
 #endif
 			return tm_buf.tm_wday;
-		}
-
-		inline std::string formatToString(TimeFormat format)
-		{
-			switch (format)
-			{
-				case DATE_ONLY:  return "%Y-%m-%d";
-				case TIME_ONLY:  return "%H:%M:%S";
-				case SHORT_DATE: return "%d.%m.%Y";
-				case SHORT_TIME: return "%H:%M";
-				case ISO:		 return "%Y-%m-%d %H:%M:%S";
-				default:         return "%Y-%m-%d %H:%M:%S";
-			}
 		}
 	} // time
 } // r_utils

@@ -135,6 +135,9 @@
     <ClCompile Include="src\time\TimeUtils.cpp">
       <Filter>Quelldateien\time</Filter>
     </ClCompile>
+    <ClCompile Include="src\time\Timer.cpp">
+      <Filter>Quelldateien\time</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\all.h">
@@ -225,6 +228,9 @@
       <Filter>Headerdateien\Event</Filter>
     </ClInclude>
     <ClInclude Include="include\time\TimeUtils.h">
+      <Filter>Headerdateien\time</Filter>
+    </ClInclude>
+    <ClInclude Include="include\time\Timer.h">
       <Filter>Headerdateien\time</Filter>
     </ClInclude>
   </ItemGroup>

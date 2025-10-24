@@ -4,6 +4,8 @@
 #include <chrono>
 
 #include "RUtils.h"
+#include "time/TimeUtils.h"
+#include "time/Timer.h"
 #include "gui/Window.h"
 #include "gui/Application.h"
 #include <logger/LoggerMakro.h>
@@ -27,7 +29,7 @@ int main() {
         .withLogger()
         .initialize();
 
-    r_utils::logger::Logger* mainLogger = utils.getLogger();
+    /*r_utils::logger::Logger* mainLogger = utils.getLogger();
     mainLogger->error("Hallo");
     r_utils::gui::Application* app = utils.getApplication();
 
@@ -51,6 +53,20 @@ int main() {
         appThread.join();
     }
 
-    std::cout << "Anwendung beendet." << std::endl;
+    std::cout << "Anwendung beendet." << std::endl;*/
+
+    r_utils::time::Timer* timer = new r_utils::time::Timer();
+    
+    timer->startInThread([] {
+        std::cout << "Timer finished!" << std::endl;
+	    }, 3000);
+
+
+	std::this_thread::sleep_for(std::chrono::seconds(1));
+	std::cout << "Main thread doing other work..." << std::endl;
+
+	std::this_thread::sleep_for(std::chrono::seconds(5));
+	std::cout << "Main thread finished." << std::endl;
+
     return 0;
 }
