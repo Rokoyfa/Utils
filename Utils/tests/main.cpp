@@ -57,9 +57,9 @@ int main() {
 
     r_utils::time::Timer* timer = new r_utils::time::Timer();
     
-    timer->startInThread([] {
+    timer->startPeriodic([] {
         std::cout << "Timer finished!" << std::endl;
-	    }, 3000);
+	    }, 1000);
 
 
 	std::this_thread::sleep_for(std::chrono::seconds(1));

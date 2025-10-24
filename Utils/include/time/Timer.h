@@ -5,6 +5,7 @@
 #include <functional>
 #include <atomic>
 #include <mutex>
+#include <memory>
 
 namespace r_utils
 {
@@ -14,12 +15,13 @@ namespace r_utils
          * @class Timer
          * @brief A flexible, thread-safe timer for measuring time intervals and timeouts.
          *
+         * Threaded operations use a shared cancellation token (std::shared_ptr<std::atomic<bool>>)
+         * so threads do not access the Timer instance after it was destroyed.
          */
         class Timer
         {
         public:
-            /** Constructors for different time representations */
-            Timer();
+            Timer() = default;
             Timer(const int time);                                       ///< Time in milliseconds
             Timer(const double time);                                    ///< Time in seconds
             Timer(const std::chrono::milliseconds& time);               ///< Time in milliseconds
@@ -30,79 +32,58 @@ namespace r_utils
             Timer(const std::chrono::steady_clock::time_point& endTime);///< End time point
             ~Timer();
 
-            /** Starts the timer */
             void start();
 
             /**
-            * @brief Starts the timer asynchronously in a managed thread.
-            *
-            * This method launches the timer in a separate `std::jthread` without blocking
-            * the main execution flow. The timer will begin counting time and must be
-            * stopped manually using `stop()`.
-            *
-            * @note The thread is automatically joined on destruction (`std::jthread`).
-            *       This prevents detached-thread issues and ensures clean resource management.
-            * @threadsafe
-            */
+             * Start the timer and create a managed thread. The thread will run until the
+             * timer is stopped (or token is canceled). The thread does NOT touch `this`.
+             */
             void startInThread();
-            /**
-            * @brief Starts the timer asynchronously and automatically stops after a specific duration.
-            *
-            * This method launches the timer in a managed thread and stops it automatically
-            * after the specified duration (`stopAfterMs` milliseconds). The main thread
-            * continues execution without waiting.
-            *
-            * @param stopAfterMs The time in milliseconds after which the timer will automatically stop.
-            *
-            * @note Useful for timeout or auto-expiration scenarios.
-            * @threadsafe
-            */
-            void startInThread(long long stopAfterMs);
-            /**
-            * @brief Starts the timer asynchronously with a callback that triggers after a delay.
-            *
-            * Launches the timer in a separate `std::jthread` and executes a user-defined callback
-            * (`fallback`) after a specified delay (`callFallback` milliseconds). The callback
-            * executes only if the timer is still running at that time.
-            *
-            * @param fallback The function to execute after the specified delay.
-            * @param callFallback The delay (in milliseconds) after which to call the fallback function.
-            *
-            * @note Ideal for timeout or watchdog-style behavior.
-            * @warning The callback runs in a separate thread — ensure proper synchronization
-            *          when accessing shared data.
-            * @threadsafe
-            */
-            void startInThread(std::function<void()> fallback, long long callFallback = 0);
 
-            /** Stops the timer */
+            /**
+             * Start timer and run a managed thread which automatically stops after stopAfterMs milliseconds.
+             */
+            void startInThread(long long stopAfterMs);
+
+            /**
+             * Start timer and run a managed thread which will call `callback` once after callFallback ms.
+             * The callback is executed only if the token is still active (i.e. the timer wasn't stopped).
+             */
+            void startInThread(std::function<void()> callback, long long callFallback = 0);
+
+            /**
+             * Start timer and run callback periodically every intervalMs milliseconds until stopped.
+             */
+            void startPeriodic(std::function<void()> callback, long long intervalMs);
+
+            /** Stop the timer (accumulates elapsed duration). */
             void stop();
-            /** Resets the timer */
+
+            /** Reset accumulated time and stop any running thread. */
             void reset();
-            /** Restart the timer (reset and start immediately). */
+
+            /** Restart the timer from zero (stops threads first). */
             void restart();
 
-            /** Checks if the timer is currently running */
             [[nodiscard]] bool isRunning() const;
 
-            /** Returns the elapsed time in milliseconds */
             [[nodiscard]] long long elapsedMilliseconds() const;
-            /** Returns the elapsed time in seconds */
             [[nodiscard]] double elapsedSeconds() const;
-            /** Returns the elapsed time in minutes */
             [[nodiscard]] double elapsedMinutes() const;
-            /** Returns the elapsed time in hours */
             [[nodiscard]] double elapsedHours() const;
-            /** Returns the elapsed time in days */
             [[nodiscard]] double elapsedDays() const;
 
         private:
             std::chrono::steady_clock::duration currentDuration() const;
+            void stopThread();
 
             std::chrono::steady_clock::time_point __startTime__;
             std::chrono::steady_clock::time_point __endTime__;
-            std::chrono::steady_clock::duration __duration__;
-			std::jthread __thread__;
+            std::chrono::steady_clock::duration __duration__{ std::chrono::steady_clock::duration::zero() };
+
+            std::unique_ptr<std::jthread> __thread__{ nullptr };
+            std::shared_ptr<std::atomic<bool>> __token__{ nullptr };
+
             mutable std::mutex __mtx__;
             std::atomic<bool> __running__{ false };
         };
