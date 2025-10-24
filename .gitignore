@@ -363,3 +363,10 @@ MigrationBackup/
 FodyWeavers.xsd
 Utils/Utils.vcxproj
 Utils/storage/storage.json
+
+# IDE-specific files
+.vscode/
+.vs/
+Utils/*.vcxproj
+Utils/*.vcxproj.filters
+Utils/*.vcxproj.user
