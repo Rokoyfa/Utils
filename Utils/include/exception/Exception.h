@@ -23,6 +23,6 @@ namespace r_utils
 		protected:
 			std::string _message;
 		};
-	}
-}
+	} // exception
+} // r_utils
 

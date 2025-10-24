@@ -7,5 +7,5 @@ namespace r_utils
 	namespace exception
 	{
 		DEFINE_EXCEPTION(WindowException);
-	}
-}
+	} // exception
+} // r_utils

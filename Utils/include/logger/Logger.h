@@ -6,6 +6,9 @@ namespace r_utils
 {
 	namespace logger
 	{
+		/**
+		 * @brief Represents predefined error types for logging.
+		 */
 		enum ErrorType
 		{
 			UNKNOWN_ERROR = 0,				// An unspecified or generic error.
@@ -50,6 +53,9 @@ namespace r_utils
 			UNSUPPORTED_ENCODING = 2017     // Data uses an encoding that is not supported by the system or application.
 		};
 
+		/**
+		 * @brief Defines the log severity levels.
+		 */
 		enum class LogLevel {
 			LOG,
 			INFO,
@@ -58,34 +64,83 @@ namespace r_utils
 			ERR
 		};
 
+		/**
+		 * @brief Logger class for printing messages with timestamp and optional color coding.
+		 *
+		 * Supports multiple log levels and error types.
+		 */
 		class Logger
 		{
 		public:
-			Logger();
-			~Logger();
+            /**
+             * @brief Constructs a new Logger object.
+             */
+            Logger();
 
-			void enableColors(bool enable);
+            /**
+             * @brief Destructor for Logger.
+             */
+            ~Logger();
 
-			void log(const std::string& msg) const;
-			void log(const char* msg) const;
+            /**
+             * @brief Enables or disables colored console output.
+             *
+             * @param enable Set to true to enable colors, false to disable.
+             */
+            void enableColors(bool enable);
 
-			void info(const std::string& msg) const;
-			void info(const char* msg) const;
+            /**
+             * @brief Logs a general message.
+             *
+             * @param msg The message string to log.
+             */
+            void log(const std::string& msg) const;
+            void log(const char* msg) const;
 
-			void debug(const std::string& msg) const;
-			void debug(const char* msg) const;
+            /**
+             * @brief Logs an informational message.
+             *
+             * @param msg The message string to log.
+             */
+            void info(const std::string& msg) const;
+            void info(const char* msg) const;
 
-			void warn(const std::string& msg) const;
-			void warn(const char* msg) const;
+            /**
+             * @brief Logs a debug message.
+             *
+             * @param msg The message string to log.
+             */
+            void debug(const std::string& msg) const;
+            void debug(const char* msg) const;
 
-			void error(const std::string& msg, ErrorType type = ErrorType::UNKNOWN_ERROR);
-			void error(const char* msg, ErrorType type = ErrorType::UNKNOWN_ERROR);
+            /**
+             * @brief Logs a warning message.
+             *
+             * @param msg The message string to log.
+             */
+            void warn(const std::string& msg) const;
+            void warn(const char* msg) const;
 
-		private:
-			bool __enableColors__ = true;
+            /**
+             * @brief Logs an error message with an optional error type.
+             *
+             * @param msg The error message to log.
+             * @param type The type of error (default: UNKNOWN_ERROR).
+             */
+            void error(const std::string& msg, ErrorType type = ErrorType::UNKNOWN_ERROR);
+            void error(const char* msg, ErrorType type = ErrorType::UNKNOWN_ERROR);
 
-			void output(const std::string& formattedMessage, LogLevel level) const;
-			void output(const char* formattedMessage, LogLevel level) const;
+        private:
+            bool __enableColors__ = true;  ///< Internal flag to enable or disable colored output
+
+            /**
+             * @brief Internal method to output a formatted message to the console.
+             *
+             * @param formattedMessage The message already formatted with prefix/tags.
+             * @param level The log level of the message.
+             */
+            void output(const std::string& formattedMessage, LogLevel level) const;
+            void output(const char* formattedMessage, LogLevel level) const;
 		};
 	} // logger
 } // r_utils

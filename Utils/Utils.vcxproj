@@ -104,6 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\mschuchardt\Documents\GitHub\Utils\Utils\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -146,6 +147,8 @@
     <ClCompile Include="src\json\JsonParser.cpp" />
     <ClCompile Include="src\logger\Logger.cpp" />
     <ClCompile Include="src\RUtils.cpp" />
+    <ClCompile Include="src\time\Timer.cpp" />
+    <ClCompile Include="src\time\TimeUtils.cpp" />
     <ClCompile Include="tests\main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -178,6 +181,8 @@
     <ClInclude Include="include\logger\Logger.h" />
     <ClInclude Include="include\logger\LoggerMakro.h" />
     <ClInclude Include="include\RUtils.h" />
+    <ClInclude Include="include\time\Timer.h" />
+    <ClInclude Include="include\time\TimeUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />

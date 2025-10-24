@@ -70,6 +70,12 @@
     <Filter Include="Headerdateien\Event\Events">
       <UniqueIdentifier>{bce55ab0-cb80-49de-a0f6-86951e3fa9fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headerdateien\time">
+      <UniqueIdentifier>{a80acf72-2d7b-44c6-89fc-d663618ddbb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\time">
+      <UniqueIdentifier>{0680e33a-16cc-4a7b-a122-a3963074f85d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="tests\main.cpp">
@@ -125,6 +131,12 @@
     </ClCompile>
     <ClCompile Include="src\event\EventDispatcher.cpp">
       <Filter>Quelldateien\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="src\time\TimeUtils.cpp">
+      <Filter>Quelldateien\time</Filter>
+    </ClCompile>
+    <ClCompile Include="src\time\Timer.cpp">
+      <Filter>Quelldateien\time</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -214,6 +226,12 @@
     </ClInclude>
     <ClInclude Include="include\event\EventDispatcher.h">
       <Filter>Headerdateien\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="include\time\TimeUtils.h">
+      <Filter>Headerdateien\time</Filter>
+    </ClInclude>
+    <ClInclude Include="include\time\Timer.h">
+      <Filter>Headerdateien\time</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

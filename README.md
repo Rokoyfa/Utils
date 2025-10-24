@@ -1,418 +1,270 @@
-# Utils - 
+# 🧩 RUtils — Modern Modular C++ Utility Framework
 
-`Utils` is a C++ library providing a collection of reusable utility classes and functions. It currently includes modules for basic file operations and JSON data handling.
-`Utils` is designed to reduce boilerplate code in modern C++ projects.
+**RUtils** is a modern, modular, and lightweight **C++20 utility framework** designed to simplify common development tasks across multiple domains such as logging, timing, JSON parsing, file handling, and more. It provides **small, self-contained modules** with clean APIs that can be easily embedded into any project — from small console tools to large backend systems.
 
-## Current Features
+---
 
-### `r_utils` - Main namespace for all modules and classes
+## 🚀 Features at a Glance
 
-### `r_utils::io` - File Utilities
+* 🧱 **Modular design** — each component is independent and can be used standalone
+* ⚙️ **Header-friendly API** — minimal includes, simple integration
+* 🧵 **Thread-safe utilities** — especially in `Logger`, `Timer`, and event-based modules
+* 📦 **Cross-platform** — builds cleanly on Windows, Linux, and macOS
+* 📖 **Well-documented** — each module has its own documentation file under `docs/`
+* 🪶 **No external dependencies** — everything written from scratch in modern C++
 
-This module offers a `File` class for simple file operations:
+---
 
-* **File Creation:** Allows for the creation of new files.
-* **Existence Check:** Checks if a file exists at the specified path.
-* **File Reading:** Reads the entire content of a text file as a `std::string`.
-* **File Writing:** Writes a `std::string` to a file (overwrites existing content).
-* **File Appending:** Appends a `std::string` to the end of an existing file.
-* **File Removal:** Deletes a file from the file system.
-* **Get File Path:** Returns the current file path of the `File` object.
+## 📦 Module Overview
 
-### `r_utils::json` – JSON Handling
+| Module            |       Status      | Description                                                                   | Documentation                                  |
+| :---------------- | :---------------: | :---------------------------------------------------------------------------- | :--------------------------------------------- |
+| **RUtilsBuilder** |      ✅ Stable     | Base builder for modular initialization and setup                             | [docs/RUtilsBuilder.md](docs/RUtilsBuilder.md) |
+| **Logger**        |      ✅ Stable     | Thread-aware logging system with color output and optional GUI integration    | [docs/Logger.md](docs/Logger.md)               |
+| **JSON**          |      ✅ Stable     | Lightweight JSON parser and builder (custom implementation, no external libs) | [docs/Json.md](docs/Json.md)                   |
+| **File**          |      ✅ Stable     | File utilities for reading, writing, and managing files safely                | [docs/File.md](docs/File.md)                   |
+| **Timer / Time**  |      ✅ Stable     | Thread-safe timing and benchmarking utilities                                 | [docs/Timer.md](docs/Timer.md)                 |
+| **Event System**  | 🚧 In Development | Event dispatcher and listener abstraction (core implemented, API evolving)    | [docs/Event.md](docs/Event.md)                 |
+| **GUI**           |  ⚠️ Experimental  | Runtime log viewer and window abstraction layer (not yet complete)            | [docs/GUI.md](docs/GUI.md)                     |
 
-This module provides essential classes for parsing, constructing, and serializing JSON data in C++.
+> ✅ **Stable:** Tested and ready for production
+> 🚧 **In Development:** Partially implemented or changing API
+> ⚠️ **Experimental:** Functional but unstable, use for testing only
 
-- **`r_utils::json::JsonType`**  
-  Enum class representing possible JSON types like `Null`, `String`, `Int`, `Double`, `Boolean`, `Object`, and `Array`.
+---
 
-- **`r_utils::json::Json`**  
-  Represents a single JSON value and provides methods for type checking, value access, and serialization.
+## 🧠 Design Philosophy
 
-- **`r_utils::json::JsonObject`**  
-  A key-value mapping structure for JSON objects, allowing retrieval, insertion, removal, and serialization of properties.
+RUtils follows a few key design principles:
 
-- **`r_utils::json::JsonArray`**  
-  A list-based structure for handling JSON arrays with support for appending, accessing elements, and converting to string.
+1. **Simplicity First** — APIs are intuitive and avoid unnecessary abstraction.
+2. **No Dependencies** — fully self-contained, no `boost`, no external logging or JSON libs.
+3. **Extensibility** — each module can be extended without changing core code.
+4. **Thread Safety Where Relevant** — modules like `Timer` and `Logger` are fully thread-safe.
+5. **Portability** — tested and built under Windows (MSVC), Linux (GCC/Clang), and macOS.
 
-- **`r_utils::json::JsonParser`**  
-  Static utility class that parses JSON strings into `JsonObject` or `JsonArray` instances.
+---
 
+## 🧩 Module Summaries
 
+### 🧱 [RUtilsBuilder](docs/RUtilsBuilder.md)
 
-## Next Steps
+A base module for initializing and managing RUtils components programmatically.
+Provides a clean interface to register and access submodules dynamically.
 
-1. **Code Cleanup & Error Handling:**
-   - Refactor and restructure code to improve maintainability and readability.
-   - Introduce debug logging for key operations and edge cases.
-   - Add proper error handling (e.g., invalid file paths, malformed JSON, access errors).
+---
 
-## Installation
+### 🧾 [Logger](docs/Logger.md)
 
-1. **Clone the Repository:**
-    ```bash
-    git clone [your_repository_url_here]
-    ```
+A flexible logging framework supporting:
 
-2. **Compilation:**
-    Depending on whether your library is header-only or has separate source files, the compilation process will vary. For a project with separate `.cpp` files, an example using g++ is:
-    ```bash
-    g++ -c src/io/File.cpp -o build/File.o
-    g++ -c src/json/Json.cpp -o build/Json.o
-    g++ -c src/json/JsonObject.cpp -o build/JsonObject.o
-    g++ main.cpp build/File.o build/Json.o build/JsonObject.o -o utils_app
-    ```
-    (Adjust the paths and compilation command according to your project structure and build system.)
+* Colored console output (Info, Debug, Error, Warning)
+* Thread-safe logging queues
+* Optional GUI-based log viewer
+* Configurable output formats and timestamps
 
-3. **Include:**
-    In your C++ source files, include the necessary header files:
-    ```cpp
-    #include "Utils/io/File.h"
-    #include "Utils/json/Json.h"
-    #include "Utils/json/JsonObject.h"
-    ```
-    Or just do:
-    ```cpp
-    #include "Utils/all.h"
-    ```
-    to include all files.
+Example:
 
-    For further and detailed installation instructions, including how to integrate `Utils` into your project and as a plugin, please refer to the [INSTALL.md](INSTALL.md) file. 
-    (Adjust the include paths according to your project structure.)
-
-## Usage
-
-### File (r_utils::io::File)
 ```cpp
-#include <iostream>
-#include "file/File.h"
-
-int main()
-{
-	
-	r_utils::io::File test = r_utils::io::File("storage/test.txt");
-	try
-	{
-		if (!test.exists())
-		{
-			test.create();
-		}
-		std::cout << test.getFilePath() << "\n";
-		test.write("Hello World!");
-
-		std::cout << test.read() << "\n";
-		// console output: "Hello World!"
-
-		test.append(" Apended output");
-
-		std::cout << test.read() << "\n";
-		// console output: "Hello World! Apended output"
-	}
-	catch (const std::exception& e)
-	{
-		std::cerr << e.what() << std::endl;
-	}
-
-	return 0;
-}
+r_utils::logger::Logger log;
+log.info("Application started");
+log.error("An error occurred during initialization");
 ```
 
-### JsonElement (r_utils::io::JsonElement)
+---
+
+### 📜 [JSON](docs/Json.md)
+
+A minimal but powerful JSON parser and writer:
+
+* Parse strings into structured objects
+* Build JSON programmatically
+* Convert to/from native C++ types
+
+Example:
+
 ```cpp
-#include <iostream>
-#include "json/JsonElement.h"
-
-int main()
-{
-	r_utils::json::JsonElement element = r_utils::json::JsonElement(std::string("Hello"));
-	
-	try
-	{
-		std::cout << element.getType() << std::endl;
-		// console output: "String"
-
-		if (!element.isString())
-		{
-			throw std::runtime_error("element is not a String");
-		}
-
-		std::string str = element.asString();
-
-		std::cout << str << std::endl;
-		//console output: "Hello"
-	}
-	catch (const std::exception& e)
-	{
-		std::cerr << e.what() << std::endl;
-	}
-	return 0;
-}
-```
-- Also usable with JsonObject, JsonArray, Boolean, Integer, Double and Null.
-
-### JsonObject (r_utils::io::JsonObject)
-```cpp
-#include <iostream>
-#include "json/JsonObject.h"
-#include "json/JsonElement.h"
-
-int main()
-{
-	r_utils::json::JsonObject obj = r_utils::json::JsonObject();
-	
-	try
-	{
-		// Simple JsonObject
-
-		obj.set("name", r_utils::json::JsonElement(std::string("Name1")));
-		obj.set("age", r_utils::json::JsonElement(18));
-
-		std::cout << obj.get("name").asString() << std::endl;
-		// console output: "Name1"
-
-		std::cout << obj.toString() << std::endl;
-		// console output: "{"name":"Name1","age":18}"
-
-
-		// Nested JsonObjects
-		r_utils::json::JsonObject dog = r_utils::json::JsonObject()
-			.set("name", r_utils::json::JsonElement(std::string("Bello")))
-			.set("age", r_utils::json::JsonElement(8))
-			.set("race", r_utils::json::JsonElement(std::string("Shepherd")));
-
-		r_utils::json::JsonObject cat = r_utils::json::JsonObject()
-			.set("name", r_utils::json::JsonElement(std::string("nemo")))
-			.set("age", r_utils::json::JsonElement(3))
-			.set("color", r_utils::json::JsonElement(std::string("Black")));
-
-		r_utils::json::JsonObject pets = r_utils::json::JsonObject()
-			.set("bello", dog)
-			.set("nemo", cat);
-
-		obj.set("pets", pets);
-
-		std::cout << obj.get("pets").asObject() << std::endl;
-		// console output: "{"bello":{"name":"Bello","age":8,"race":"Shepherd"},"nemo":{"name":"nemo","age":3,"color":"Black"}}"
-		
-		r_utils::json::JsonObject obj2 = obj.get("pets").asObject();
-
-		std::cout << obj2.get("bello").asObject() << std::endl;
-		// console output: "{"name":"Bello","age":8,"race":"Shepherd"}"
-
-		std::cout << obj.toString(true) << std::endl;
-		/* console output:
-		*{
-			"name": "Name1",
-			"age": 18,
-			"pets": {
-				    "bello": {
-					        "name": "Bello",
-						    "age": 8,
-							"race": "Shepherd"
-					},
-					"nemo": {
-						    "name": "nemo",
-							"age": 3,
-							"color": "Black"
-					}
-			}
-		*}
-		*/
-	}
-	catch (const std::exception& e)
-	{
-		std::cerr << e.what() << std::endl;
-	}
-	return 0;
-}
+auto json = r_utils::json::Json::parse("{\"name\":\"RUtils\", \"version\":1}");
+std::string name = json["name"].asString();
 ```
 
-### JsonArray  (r_utils::io::JsonArray )
+---
+
+### 📂 [File](docs/File.md)
+
+Utility class for file operations:
+
+* Read and write files safely
+* Create, delete, and manage paths
+* Cross-platform support for relative and absolute paths
+
+Example:
+
 ```cpp
-#include <iostream>
-#include "json/JsonArray.h"
-#include "json/JsonElement.h"
-
-int main()
-{
-	r_utils::json::JsonArray arr;
-
-	/*
-	* Optional:
-		r_utils::json::JsonArray arr = r_utils::json::JsonArray()
-			.add(r_utils::json::JsonElement(std::string("This")))
-			.add(r_utils::json::JsonElement(std::string("is")))
-			.add(r_utils::json::JsonElement(std::string("a")))
-			.add(r_utils::json::JsonElement(std::string("Array")))
-			.add(r_utils::json::JsonElement(std::string("Pong")));
-	*/
-	
-	try
-	{
-		arr.add(r_utils::json::JsonElement(std::string("This")));
-		arr.add(r_utils::json::JsonElement(std::string("is")));
-		arr.add(r_utils::json::JsonElement(std::string("a")));
-		arr.add(r_utils::json::JsonElement(std::string("Array")));
-		arr.add(r_utils::json::JsonElement(std::string("Pong")));
-
-		std::cout << arr << std::endl;
-		// console output: ["This","is","a","Array","Pong"]
-
-		arr.remove(r_utils::json::JsonElement(std::string("Pong")));
-
-		std::cout << arr << std::endl;
-		// console output: ["This","is","a","Array"]
-	}
-	catch (const std::exception& e)
-	{
-		std::cerr << e.what() << std::endl;
-	}
-	return 0;
-}
+r_utils::file::File f("data.txt");
+f.create();
+f.write("Hello, RUtils!");
 ```
 
-### JsonParser (r_utils::io::JsonParser)
+---
+
+### ⏱️ [Timer / Time](docs/Timer.md)
+
+High-precision and thread-safe timing utilities.
+Supports:
+
+* Manual or threaded timers
+* Elapsed time calculation in multiple units
+* Callback-based async timers
+
+Example:
+
 ```cpp
-#include "Utils/json/JsonParser.h"
-#include <iostream>
-
-int main() {
-    #include <iostream>
-#include <string>
-#include "json/JsonParser.h"
-#include "json/JsonObject.h"
-#include "json/JsonElement.h"
-#include "json/JsonArray.h"
-
-int main() {
-    try {
-        std::string jsonString = R"({"name": "John Doe", "age": 30, "isStudent": false, "courses": ["Math", "Science"], "address": {"street": "123 Main St", "city": "Anytown"}})";
-
-        std::cout << "JSON string to be parsed:\n" << jsonString << std::endl;
-
-        r_utils::json::JsonObject jsonObject = r_utils::json::JsonParser::parse(jsonString);
-
-        std::cout << "\nSuccessfully parsed JsonObject:\n" << jsonObject.toString(true) << std::endl; // Use toString with prettyPrint for better readability
-
-        // Accessing individual elements
-        std::cout << "\nAccessing individual elements:" << std::endl;
-        if (jsonObject.contains("name")) {
-            std::cout << "Name: " << jsonObject.get("name").asString() << std::endl;
-        }
-        if (jsonObject.contains("age")) {
-            std::cout << "Age: " << jsonObject.get("age").asDouble() << std::endl;
-        }
-        if (jsonObject.contains("isStudent")) {
-            std::cout << "Is Student: " << (jsonObject.get("isStudent").asBoolean() ? "true" : "false") << std::endl;
-        }
-        if (jsonObject.contains("courses")) {
-            r_utils::json::JsonArray courses = jsonObject.get("courses").asArray();
-            std::cout << "Courses: " << courses << std::endl;
-        }
-        if (jsonObject.contains("address")) {
-            r_utils::json::JsonObject address = jsonObject.get("address").asObject();
-            if (address.contains("street")) {
-                std::cout << "Address - Street: " << address.get("street").asString() << std::endl;
-            }
-            if (address.contains("city")) {
-                std::cout << "Address - City: " << address.get("city").asString() << std::endl;
-            }
-        }
-
-        // Example of an error case (invalid JSON)
-        std::string invalidJsonString = "{ \"name\": \"Jane Doe\", \"age\": }";
-        std::cout << "\nAttempting to parse invalid JSON:\n" << invalidJsonString << std::endl;
-        r_utils::json::JsonObject invalidJsonObject = r_utils::json::JsonParser::parse(invalidJsonString);
-        std::cout << "Should not reach here!" << std::endl;
-
-    }
-    catch (const std::exception& e) {
-        std::cerr << "\nError parsing JSON data: " << e.what() << std::endl;
-    }
-
-    return 0;
-}
-}
+r_utils::time::Timer timer;
+timer.start();
+// ... some work ...
+timer.stop();
+std::cout << "Elapsed: " << timer.elapsedMilliseconds() << " ms\n";
 ```
 
-### Example of use
-```cpp
-#include <iostream>
-#include <string>
-#include "json/JsonParser.h"
-#include "json/JsonObject.h"
-#include "json/JsonElement.h"
-#include "json/JsonArray.h"
-#include "json/Json.h"
-#include "file/File.h"
+---
 
-int main() {
-    try {
-        // Path to the JSON file
-        std::string filePath = "storage/storage.json";
-        r_utils::io::File jsonFile(filePath);
+### 🎯 [Event System](docs/Event.md)
 
-        std::cout << "Attempting to read JSON data from file: " << jsonFile.getFilePath() << std::endl;
+A lightweight event system for decoupled communication.
+Includes event base classes and a dispatcher mechanism.
+Still under development (API may change).
 
-        // Read JSON data from the file
-        std::string jsonString = jsonFile.read();
-        std::cout << "Successfully read JSON content:\n" << jsonString << std::endl;
+---
 
-        // Parse the JSON data
-        r_utils::json::JsonObject rootObject = r_utils::json::JsonParser::parse(jsonString);
+### 🪟 [GUI](docs/GUI.md)
 
-        std::cout << "\nSuccessfully parsed JSON object:\n" << rootObject.toString(true) << std::endl;
+Experimental cross-platform GUI for displaying basic windows.
+Implements basic `Window_*` classes for Windows, Linux, and macOS.
+Currently **not stable** and should only be used for testing.
 
-        // Example operations on the parsed data
-        if (rootObject.contains("users") && rootObject.get("users").isArray()) {
-            r_utils::json::JsonArray usersArray = rootObject.get("users").asArray();
-            std::cout << "\nIterating through users:" << std::endl;
-            for (size_t i = 0; i < usersArray.size(); ++i) {
-                if (usersArray.getValues()[i].isObject()) {
-                    r_utils::json::JsonObject userObject = usersArray.getValues()[i].asObject();
-                    if (userObject.contains("username") && userObject.contains("email")) {
-                        std::cout << "- Username: " << userObject.get("username").asString()
-                            << ", Email: " << userObject.get("email").asString() << std::endl;
-                    }
-                }
-            }
+---
 
-            // Example of adding a new element (assuming you have a method to modify JsonObject/JsonArray)
-            // Here, only the string representation is created for output
-            r_utils::json::JsonObject newUser;
-            newUser.set("username", r_utils::json::JsonElement("new_user"));
-            newUser.set("email", r_utils::json::JsonElement("new@example.com"));
+## ⚙️ Building & Installing RUtils
 
-            // Add the new user object (as a string) to the output
-            std::stringstream updatedJsonStream;
-            updatedJsonStream << rootObject.toString(true).substr(0, rootObject.toString(true).size() - 2) // Remove last "}"
-                << ",\n  \"newUser\": " << newUser.toJson().toString() << "\n}";
-            std::cout << "\nExample of adding a new element (output string):\n" << updatedJsonStream.str() << std::endl;
+### Installation
 
-            // Convert the modified JsonObject back to a JSON string and write it to the file
-            r_utils::json::Json jsonWrapper = rootObject.toJson();
-            std::string updatedJsonString = jsonWrapper.toString();
-            jsonFile.write(updatedJsonString);
+Currently, the library can only be used by cloning the repository directly.
+For detailed instructions, see [INSTALL.md](docs/INSTALL.md).
 
-            std::cout << "\nUpdated JSON written back to " << jsonFile.getFilePath() << std::endl;
-        }
-        else {
-            std::cout << "\n'users' array not found in the JSON data." << std::endl;
-        }
-
-    }
-    catch (const std::exception& e) {
-        std::cerr << "\nError during application execution: " << e.what() << std::endl;
-    }
-
-    return 0;
-}
+```bash
+git clone https://github.com/<your-username>/RUtils.git
+cd RUtils
 ```
 
-## License
+> CMake support is planned but not yet implemented.
+> Requires **C++20** or higher.
 
-This project is licensed under the [MIT License](LICENSE). See the [LICENSE](LICENSE) file for more information.
+### Using Visual Studio
 
-## Copyright
+Open the solution:
 
-Copyright (c) 2025 Rokoyfa
+```
+Utils/Utils.sln
+```
+
+Build the desired configuration (`Debug` or `Release`).
+
+### Using CMake (planned)
+
+CMake setup will be documented in `INSTALL.md` once implemented.
+
+---
+
+## 🧩 Directory Structure
+
+```
+Utils/
+├── include/
+│   ├── logger/
+│   ├── file/
+│   ├── json/
+│   ├── time/
+│   ├── event/
+│   └── gui/
+├── src/
+│   ├── logger/
+│   ├── file/
+│   ├── json/
+│   ├── time/
+│   ├── event/
+│   └── gui/
+├── tests/
+│   └── maincpp
+├── CMakeLists.txt
+README.md
+LICENSE
+docs/
+├── RUtilsBuilder.md
+├── Logger.md
+├── Json.md
+├── File.md
+├── Timer.md
+├── Event.md
+├── GUI.md
+└── INSTALL.md
+```
+
+---
+
+## 🧪 Examples & Documentation
+
+Each module has a dedicated documentation file with usage examples and API notes:
+
+* [RUtilsBuilder](docs/RUtilsBuilder.md)
+* [Logger](docs/Logger.md)
+* [JSON](docs/Json.md)
+* [File](docs/File.md)
+* [Timer](docs/Timer.md)
+* [Event](docs/Event.md)
+* [GUI](docs/GUI.md)
+
+---
+
+## 🧭 Roadmap
+
+| Feature                    | Status         | Notes                                      |
+| -------------------------- | -------------- | ------------------------------------------ |
+| Event system rewrite       | 🧩 Planned     | More expressive API and type-safe dispatch |
+| GUI log window             | 🧪 In progress | Visual runtime log console                 |
+| CI/CD integration          | 🔧 Planned     | GitHub Actions or CMake tests              |
+| Unit tests for all modules | 🧪 Ongoing     | Using Catch2 or GoogleTest                 |
+
+---
+
+## 🤝 Contributing
+
+Contributions, ideas, and bug reports are welcome!
+To contribute:
+
+1. Fork the repository
+2. Create a new branch
+3. Commit changes with clear messages
+4. Open a Pull Request
+
+If you’re working on an unfinished module (like GUI or Event), please discuss the API design first in an issue.
+
+---
+
+## ⚖️ License
+
+This project is released under the **MIT License**.
+See [LICENSE](LICENSE) for details.
+
+---
+
+## 📫 Contact
+
+Maintained by Rokoyfa
+If you have questions, suggestions, or feedback, feel free to open an issue or discussion.
+
+---
+
+### ❤️ Thank you for using RUtils!
+
+If you like the project, consider giving it a ⭐ on GitHub — it helps visibility an

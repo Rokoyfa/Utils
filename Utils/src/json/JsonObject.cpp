@@ -17,7 +17,8 @@ namespace r_utils
         r_utils::json::JsonElement JsonObject::get(const std::string& key) const 
         {
             auto it = values.find(key);
-            if (it != values.end()) {
+            if (it != values.end()) 
+            {
                 return it->second;
             }
 
@@ -26,7 +27,8 @@ namespace r_utils
 
         r_utils::json::JsonElement JsonObject::get(const int index) const
         {
-            if (index >= this->size()) {
+            if (index >= this->size()) 
+            {
                 throw r_utils::exception::JsonObjectException(std::out_of_range("Index out of bounds"));
             }
             auto it = values.begin();
@@ -95,22 +97,22 @@ namespace r_utils
 
                 switch (it)
                 {
-                case r_utils::json::JsonType::Null:
-                    result << "null"; break;
-                case r_utils::json::JsonType::String:
-                    result << "\"" << value.asString() << "\""; break;
-                case r_utils::json::JsonType::Int:
-                    result << value.asInt(); break;
-                case r_utils::json::JsonType::Double:
-                    result << value.asDouble(); break;
-                case r_utils::json::JsonType::Boolean:
-                    result << (value.asBoolean() ? "true" : "false"); break;
-                case r_utils::json::JsonType::Array:
-                    result << value.asArray().toString(); break;
-                case r_utils::json::JsonType::Object:
-                    result << value.asObject().toString(prettyPrint, indentLevel + 1); break;
-                default:
-                    break;
+                    case r_utils::json::JsonType::Null:
+                        result << "null"; break;
+                    case r_utils::json::JsonType::String:
+                        result << "\"" << value.asString() << "\""; break;
+                    case r_utils::json::JsonType::Int:
+                        result << value.asInt(); break;
+                    case r_utils::json::JsonType::Double:
+                        result << value.asDouble(); break;
+                    case r_utils::json::JsonType::Boolean:
+                        result << (value.asBoolean() ? "true" : "false"); break;
+                    case r_utils::json::JsonType::Array:
+                        result << value.asArray().toString(); break;
+                    case r_utils::json::JsonType::Object:
+                        result << value.asObject().toString(prettyPrint, indentLevel + 1); break;
+                    default:
+                        break;
                 }
 
 

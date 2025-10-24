@@ -9,7 +9,8 @@ namespace r_utils
         }
 
         Json::Json(JsonElement element)
-            : root(std::move(element)) {}
+            : root(std::move(element)) 
+        {}
 
 
         Json Json::parse(const std::string& input)

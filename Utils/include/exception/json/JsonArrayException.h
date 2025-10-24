@@ -7,5 +7,5 @@ namespace r_utils
 	namespace exception
 	{
 		DEFINE_EXCEPTION(JsonArrayException)
-	}
-}
+	} // exception
+} // r_utils
