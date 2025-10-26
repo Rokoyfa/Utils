@@ -363,6 +363,7 @@ MigrationBackup/
 FodyWeavers.xsd
 Utils/Utils.vcxproj
 Utils/storage/storage.json
+<<<<<<< HEAD
 
 # IDE-specific files
 .vscode/
@@ -371,3 +372,5 @@ Utils/storage/storage.json
 Utils/*.vcxproj
 Utils/*.vcxproj.filters
 Utils/*.vcxproj.user
+=======
+>>>>>>> parent of 92d7362 (V 1.9.4.6)
