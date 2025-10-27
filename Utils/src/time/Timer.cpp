@@ -40,8 +40,7 @@ namespace r_utils
                 while (token->load(std::memory_order_acquire)) {
                     std::this_thread::sleep_for(std::chrono::seconds(1));
                 }
-                // thread ends cleanly
-                });
+            });
         }
 
         void Timer::startInThread(long long stopAfterMs)
