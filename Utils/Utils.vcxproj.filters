@@ -76,6 +76,15 @@
     <Filter Include="Quelldateien\time">
       <UniqueIdentifier>{0680e33a-16cc-4a7b-a122-a3963074f85d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headerdateien\string">
+      <UniqueIdentifier>{ad48de3a-7170-4b25-af2a-459c842d4afb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\string">
+      <UniqueIdentifier>{9e790e8e-9194-42d8-8964-5f4240d1dcc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\Exception\String">
+      <UniqueIdentifier>{0e926c4e-f39d-4a27-8b92-fa8641f522e2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="tests\main.cpp">
@@ -137,6 +146,9 @@
     </ClCompile>
     <ClCompile Include="src\time\Timer.cpp">
       <Filter>Quelldateien\time</Filter>
+    </ClCompile>
+    <ClCompile Include="src\string\StringUtils.cpp">
+      <Filter>Quelldateien\string</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -232,6 +244,12 @@
     </ClInclude>
     <ClInclude Include="include\time\Timer.h">
       <Filter>Headerdateien\time</Filter>
+    </ClInclude>
+    <ClInclude Include="include\string\StringUtils.h">
+      <Filter>Headerdateien\string</Filter>
+    </ClInclude>
+    <ClInclude Include="include\exception\string\StringException.h">
+      <Filter>Headerdateien\Exception\String</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
