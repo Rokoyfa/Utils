@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <cctype>
 #include <sstream>
+#include <exception/string/StringException.h>
 
 namespace r_utils
 {
@@ -14,24 +15,20 @@ namespace r_utils
             return string.length();
         }
 
-        size_t length(char* string)
+        size_t length(char* c)
         {
+            if (!c)
+                throw r_utils::exception::NullPointerException("Null string pointer in length(char*)");
+
             size_t len = 0;
-            while (string && string[len] != '\0') len++;
+            while (c[len] != '\0') len++;
             return len;
         }
 
         char charAt(const std::string& string, size_t index)
         {
-            if (index >= string.length()) return '\0';
-            return string[index];
-        }
-
-        char charAt(char* string, size_t index)
-        {
-            if (!string) return '\0';
-            size_t len = r_utils::string::length(string);
-            if (index >= len) return '\0';
+            if (index >= string.length())
+                throw r_utils::exception::IndexOutOfRangeException("Index out of range in charAt()");
             return string[index];
         }
 
@@ -43,80 +40,60 @@ namespace r_utils
             return string.empty();
         }
 
-        bool isEmpty(char* string)
+        bool isEmpty(char* c)
         {
-            return !string || string[0] == '\0';
+            if (!c)
+                throw r_utils::exception::NullPointerException("Null string pointer in isEmpty(char*)");
+            return c[0] == '\0';
         }
 
         bool contains(const std::string& string, const std::string& contains)
         {
+            if (contains.empty())
+                throw r_utils::exception::InvalidArgumentException("Cannot search for empty substring in contains()");
             return string.find(contains) != std::string::npos;
-        }
-
-        bool contains(char string, const std::string& contains)
-        {
-            return contains.find(string) != std::string::npos;
         }
 
         bool contains(const std::string& string, char contains)
         {
-            return string.find(contains) != std::string::npos;
-        }
-
-        bool contains(char string, char contains)
-        {
-            return string == contains;
+			return r_utils::string::contains(string, std::string(1, contains));
         }
 
         bool startsWith(const std::string& string, const std::string& begins)
         {
+            if (begins.empty())
+                throw r_utils::exception::InvalidArgumentException("Cannot check startsWith() with empty prefix");
             return string.rfind(begins, 0) == 0;
         }
 
         bool startsWith(const std::string& string, char begins)
         {
-            return !string.empty() && string.front() == begins;
-        }
-
-        bool startsWith(char string, const std::string& begins)
-        {
-            return begins.size() == 1 && begins.front() == string;
-        }
-
-        bool startsWith(char string, char begins)
-        {
-            return string == begins;
+            return r_utils::string::startsWith(string, std::string(1, begins));
         }
 
         bool endsWith(const std::string& string, const std::string& ends)
         {
-            if (ends.size() > string.size()) return false;
+            if (string.size() < ends.size()) return false;
+            if (ends.empty())
+                throw r_utils::exception::InvalidArgumentException("Cannot check endsWith() with empty prefix");
             return std::equal(ends.rbegin(), ends.rend(), string.rbegin());
         }
 
         bool endsWith(const std::string& string, char ends)
         {
-            return !string.empty() && string.back() == ends;
-        }
-
-        bool endsWith(char string, const std::string& ends)
-        {
-            return ends.size() == 1 && ends.back() == string;
-        }
-
-        bool endsWith(char string, char ends)
-        {
-            return string == ends;
+            return r_utils::string::endsWith(string, std::string(1, ends));
         }
 
         bool isAlpha(const std::string& string)
         {
+            if (string.empty())
+                throw r_utils::exception::InvalidArgumentException("Cannot check isAlpha() on empty string");
             return std::all_of(string.begin(), string.end(), ::isalpha);
         }
 
         bool isAlpha(char string)
         {
-            return std::isalpha(string);
+            return r_utils::string::isAlpha(std::string(1, string));
         }
 
 
@@ -129,9 +106,9 @@ namespace r_utils
             return result;
         }
 
-        std::string toLowerCase(char string)
+        std::string toLowerCase(char c)
         {
-            return std::string(1, static_cast<char>(std::tolower(string)));
+            return std::string(1, static_cast<char>(::tolower(c)));
         }
 
         std::string toUpperCase(const std::string& string)
@@ -141,9 +118,9 @@ namespace r_utils
             return result;
         }
 
-        std::string toUpperCase(char string)
+        std::string toUpperCase(char c)
         {
-            return std::string(1, static_cast<char>(std::toupper(string)));
+            return std::string(1, static_cast<char>(::toupper(c)));
         }
 
         std::string trim(const std::string& string)
@@ -154,11 +131,6 @@ namespace r_utils
             return string.substr(start, end - start + 1);
         }
 
-        std::string trim(char string)
-        {
-            return std::string(1, string);
-        }
-
         std::string reverse(const std::string& string)
         {
             std::string result = string;
@@ -166,56 +138,53 @@ namespace r_utils
             return result;
         }
 
-        std::string reverse(char string)
-        {
-            return std::string(1, string);
-        }
-
         std::string capitalize(const std::string& string)
         {
-            if (string.empty()) return string;
+            if (string.empty())
+                throw r_utils::exception::InvalidArgumentException("Cannot capitalize an empty string");
             std::string result = toLowerCase(string);
             result[0] = std::toupper(result[0]);
             return result;
         }
 
-        std::string capitalize(char string)
-        {
-            return std::string(1, static_cast<char>(std::toupper(string)));
-        }
-
 
         // ========== MANIPULATING ==========
 
-        std::string replace(const std::string& string, const std::string& toReplace)
+        std::string replace(const std::string& string, const std::string& replace, const std::string& toReplace)
         {
-            return toReplace;
+            if (replace.empty())
+                throw r_utils::exception::InvalidArgumentException("Replace target cannot be empty");
+
+            std::string result = string;
+            size_t pos = 0;
+            while ((pos = result.find(replace, pos)) != std::string::npos)
+            {
+                result.replace(pos, replace.length(), toReplace);
+                pos += toReplace.length();
+            }
+            return result;
         }
 
-        std::string replace(char string, const std::string& toReplace)
+        std::string replace(const std::string& string, char replace, const std::string& toReplace)
         {
-            return toReplace;
+			return r_utils::string::replace(string, std::string(1, replace), toReplace);
         }
 
-        std::string replace(const std::string& string, char toReplace)
+        std::string replace(const std::string& string, const std::string& replace, char toReplace)
         {
-            return std::string(1, toReplace);
+			return r_utils::string::replace(string, replace, std::string(1, toReplace));
         }
 
-        std::string replace(char string, char toReplace)
+        std::string replace(const std::string& string, char replace, char toReplace)
         {
-            return std::string(1, toReplace);
+			return r_utils::string::replace(string, std::string(1, replace), std::string(1, toReplace));
         }
 
         std::string substring(const std::string& string, size_t start, size_t length)
         {
-            if (start >= string.size()) return "";
+            if (start > string.size())
+                throw r_utils::exception::IndexOutOfRangeException("Start index out of range in substring()");
             return string.substr(start, length);
-        }
-
-        std::string substring(char string, size_t start, size_t length)
-        {
-            return std::string(1, string);
         }
 
         std::string append(const std::string& string, const std::string& toAppend)
@@ -223,9 +192,9 @@ namespace r_utils
             return string + toAppend;
         }
 
-        std::string append(char string, const std::string& toAppend)
+        std::string append(char c, const std::string& toAppend)
         {
-            return std::string(1, string) + toAppend;
+            return std::string(1, c) + toAppend;
         }
 
         std::string append(const std::string& string, char toAppend)
@@ -233,13 +202,16 @@ namespace r_utils
             return string + toAppend;
         }
 
-        std::string append(char string, char toAppend)
+        std::string append(char c, char toAppend)
         {
-            return std::string(1, string) + toAppend;
+            return std::string(1, c) + toAppend;
         }
 
         std::vector<std::string> split(const std::string& string, char delimiter)
         {
+            if (string.empty())
+                throw r_utils::exception::InvalidArgumentException("Cannot split empty string");
+
             std::vector<std::string> parts;
             std::stringstream ss(string);
             std::string item;
@@ -248,18 +220,16 @@ namespace r_utils
             return parts;
         }
 
-        std::vector<std::string> split(char string, char delimiter)
-        {
-            std::vector<std::string> result;
-            result.push_back(std::string(1, string));
-            return result;
-        }
-
 
         // ========== CLASS IMPLEMENTATION ==========
 
         StringUtils::StringUtils(const std::string& string) : __string__(string) {}
-        StringUtils::StringUtils(const char* string) : __string__(string) {}
+        StringUtils::StringUtils(const char* c)
+        {
+            if (!c)
+                throw r_utils::exception::NullPointerException("Null pointer passed to StringUtils(const char*)");
+            __string__ = c;
+        }
         StringUtils::StringUtils(char string) : __string__(1, string) {}
 
         size_t StringUtils::length() const
@@ -342,15 +312,27 @@ namespace r_utils
             return *this;
         }
 
-        StringUtils& StringUtils::replace(const std::string& toReplace)
+        r_utils::string::StringUtils& StringUtils::replace(const std::string& replace, const std::string& toReplace)
         {
-            __string__ = toReplace;
+			__string__ = r_utils::string::replace(__string__, replace, toReplace);
             return *this;
         }
 
-        StringUtils& StringUtils::replace(char toReplace)
+        r_utils::string::StringUtils& StringUtils::replace(char replace, char toReplace)
         {
-            __string__ = std::string(1, toReplace);
+            __string__ = r_utils::string::replace(__string__, replace, toReplace);
+            return *this;
+        }
+
+        r_utils::string::StringUtils& StringUtils::replace(char replace, const std::string& toReplace)
+        {
+            __string__ = r_utils::string::replace(__string__, replace, toReplace);
+            return *this;
+        }
+
+        r_utils::string::StringUtils& StringUtils::replace(const std::string& replace, char toReplace)
+        {
+            __string__ = r_utils::string::replace(__string__, replace, toReplace);
             return *this;
         }
 
@@ -372,7 +354,7 @@ namespace r_utils
             return *this;
         }
 
-        const std::vector<std::string> StringUtils::split(char delimiter) const
+        std::vector<std::string> StringUtils::split(char delimiter) const
         {
             return r_utils::string::split(__string__, delimiter);
         }
@@ -386,5 +368,5 @@ namespace r_utils
         {
             return __string__;
         }
-    }
-}
+    } // string
+} //r_utils

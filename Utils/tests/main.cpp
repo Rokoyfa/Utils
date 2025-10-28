@@ -10,6 +10,7 @@
 #include "gui/Window.h"
 #include "gui/Application.h"
 #include <logger/LoggerMakro.h>
+#include "string/StringUtils.h"
 
 #include "event/IEventListener.h"
 
@@ -79,7 +80,7 @@ int main() {
 
     std::cout << "Anwendung beendet." << std::endl;*/
 
-    r_utils::time::Timer* timer = new r_utils::time::Timer();
+    /*r_utils::time::Timer* timer = new r_utils::time::Timer();
     
     timer->startPeriodic([] {
         std::cout << "Timer finished!" << std::endl;
@@ -90,7 +91,12 @@ int main() {
 	std::cout << "Main thread doing other work..." << std::endl;
 
 	std::this_thread::sleep_for(std::chrono::seconds(5));
-	std::cout << "Main thread finished." << std::endl;
+	std::cout << "Main thread finished." << std::endl;*/
+
+	/*std::cout << r_utils::string::capitalize("hallo welt! dies ist ein test.") << std::endl;
+	r_utils::string::StringUtils string = r_utils::string::StringUtils("hallo welt! dies ist ein test.");
+
+	std::cout << string.reverse().str() << std::endl;*/
 
     return 0;
 }
