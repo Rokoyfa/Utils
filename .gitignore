@@ -374,3 +374,4 @@ Utils/*.vcxproj.user
 
 # local files
 *.pdf
+/build
